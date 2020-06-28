@@ -9,17 +9,12 @@ import "./App.css";
 // ];
 
 const App = () => pug`
-  div
-    .jumbotron
-      h1.display-4 Hello, world!
-      p.lead
-        | This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+  .card(styles="width: 18rem;")
+    .card-header
+      h5.card-title Todo
 
-      hr.my-4
-      p
-        | It uses utility classes for typography and spacing to space content out within the larger container.
-
-      a.btn.btn-primary.btn-lg(href="#", role="button") Learn more
+    .card-body
+      a.btn.btn-primary(href="#") Add todo
   `;
 
 export default App;
