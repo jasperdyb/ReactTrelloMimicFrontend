@@ -1,19 +1,27 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
+// bootstrap
+// import Button from "react-bootstrap/Button";
+import ListGroup from "react-bootstrap/Button";
+
+// const todos = [
+//   {
+//     name: "buy meat",
+//     finished: false,
+//   },
+// ];
+
 const App = () => pug`
-  div(className="app")
-    header(className="App-header")
-      img(src=logo className="App-logo" alt="logo")
+  div
+    .jumbotron
+      h1.display-4 Hello, world!
+      p.lead
+        | This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+      hr.my-4
       p
-      |Edit
-      code src/App.js
-      |and save to reload.
-      a(className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer") Learn React
+        | It uses utility classes for typography and spacing to space content out within the larger container.
+      a.btn.btn-primary.btn-lg(href="#", role="button") Learn more
   `;
 
 export default App;
