@@ -1,48 +1,29 @@
 import React from "react";
 import "./App.css";
+// import { DndProvider } from "react-dnd";
+// import HTML5backend from "react-dnd-html5-backend";
 
-class TodoList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: [
-        {
-          name: "todo1",
-          finished: false,
-        },
-        {
-          name: "todo2",
-          finished: false,
-        },
-        {
-          name: "todo3",
-          finished: false,
-        },
-      ],
-    };
-  }
+// Components
+import TodoList from "./components/TodoList.component.jsx";
 
-  render() {
-    return pug`
-      .d-flex.justify-content-center
-        .card.todo-list
-          .card-header
-            h5.card-title Todo
-
-          .card-body.p-2
-            .row.row-cols-1
-              for todo in this.state.todos
-                .col.py-1
-                  a.btn.d-flex.todo-item(href="#") #{todo.name}
-
-          .card-footer
-            a.btn.btn-light(href="#") + Add todo
-      `;
-  }
-}
+//dummy
+const todoItems = [
+  {
+    name: "todo1",
+    finished: false,
+  },
+  {
+    name: "todo2",
+    finished: false,
+  },
+  {
+    name: "todo3",
+    finished: false,
+  },
+];
 
 const App = () => pug`
-  TodoList
+  TodoList(todoItems=todoItems)
   `;
 
 export default App;
