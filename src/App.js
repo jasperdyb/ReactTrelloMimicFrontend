@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-// import { DndProvider } from "react-dnd";
-// import HTML5backend from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 // Components
 import TodoList from "./components/TodoList.component.jsx";
@@ -23,7 +23,8 @@ const todoItems = [
 ];
 
 const App = () => pug`
-  TodoList(todoItems=todoItems)
+  DndProvider(backend=HTML5Backend)
+    TodoList(todoItems=todoItems)
   `;
 
 export default App;
