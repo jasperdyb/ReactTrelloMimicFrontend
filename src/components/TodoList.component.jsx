@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Todo from "./Todo.component";
 
 export default function TodoList({ todoItems }) {
   const Todos = todoItems.map((todo, index) => {
     return pug`
-      a.btn.d-flex.todo-item(href="#" key=todo.name) #{todo.name}
+      Todo(key=todo.name todo=todo) 
     `;
   });
 
@@ -13,10 +14,9 @@ export default function TodoList({ todoItems }) {
       .card.todo-list
         .card-header
           h5.card-title Todo
-          div #{Todos}
 
         .card-body.p-2
-          // Todos
+          div #{Todos}
 
         .card-footer
           a.btn.btn-light(href="#") + Add todo
