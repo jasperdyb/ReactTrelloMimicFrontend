@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import CustomDragLayer from "./dnd/customDragLayer";
 
 // Components
 import TodoList from "./components/TodoList.component.jsx";
@@ -20,10 +21,15 @@ const todoItems = [
     name: "todo3",
     finished: false,
   },
+  {
+    name: "todo4",
+    finished: false,
+  },
 ];
 
 const App = () => pug`
   DndProvider(backend=HTML5Backend)
+    CustomDragLayer 
     TodoList(todoItems=todoItems)
   `;
 
