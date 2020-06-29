@@ -1,20 +1,48 @@
 import React from "react";
 import "./App.css";
 
-// const todos = [
-//   {
-//     name: "buy meat",
-//     finished: false,
-//   },
-// ];
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todos: [
+        {
+          name: "todo1",
+          finished: false,
+        },
+        {
+          name: "todo2",
+          finished: false,
+        },
+        {
+          name: "todo3",
+          finished: false,
+        },
+      ],
+    };
+  }
+
+  render() {
+    return pug`
+      .d-flex.justify-content-center
+        .card.todo-list
+          .card-header
+            h5.card-title Todo
+
+          .card-body.p-2
+            .row.row-cols-1
+              for todo in this.state.todos
+                .col.py-1
+                  a.btn.d-flex.todo-item(href="#") #{todo.name}
+
+          .card-footer
+            a.btn.btn-light(href="#") + Add todo
+      `;
+  }
+}
 
 const App = () => pug`
-  .card(styles="width: 18rem;")
-    .card-header
-      h5.card-title Todo
-
-    .card-body
-      a.btn.btn-primary(href="#") Add todo
+  TodoList
   `;
 
 export default App;
