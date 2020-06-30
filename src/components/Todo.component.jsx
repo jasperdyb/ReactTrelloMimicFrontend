@@ -12,6 +12,7 @@ export default function Todo({ todo, index, handleMoveTodo }) {
     }),
   });
 
+  //clear default drag preview
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
     // eslint-disable-next-line
