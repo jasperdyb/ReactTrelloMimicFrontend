@@ -7,6 +7,8 @@ import TodoListFooter from "./TodoListFooter.component";
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
 
+  const [hideOnDrag] = useState(false);
+
   const handleMoveTodo = (fromTodo, toIndex, where) => {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
@@ -24,24 +26,33 @@ export default function TodoList(props) {
         newTodos = todoItems.concat(movedTodo).concat(tails);
     }
 
+    console.log(newTodos);
     setTodoItems(newTodos);
   };
 
   const Todos = todoItems.map((todo, index) => {
-    const propsToTodo = { todo, index, handleMoveTodo };
+    const propsToTodo = {
+      todo,
+      index,
+      handleMoveTodo,
+      hideOnDrag,
+    };
     return pug`
       Todo(key=index ...propsToTodo ) 
     `;
   });
 
+  const propsToTodoListHeader = { handleMoveTodo, hideOnDrag };
+  const propsToTodoListFooter = { handleMoveTodo, hideOnDrag };
+
   return pug`
     .d-flex.justify-content-center
       .card.todo-list
-        TodoListHeader( title ="Todo List" handleMoveTodo=handleMoveTodo)
+        TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
         .card-body.p-0
           div #{Todos}
 
-        TodoListFooter(handleMoveTodo =handleMoveTodo)
+        TodoListFooter(...propsToTodoListFooter)
     `;
 }
 

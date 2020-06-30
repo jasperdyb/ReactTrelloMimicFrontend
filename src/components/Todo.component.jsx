@@ -4,12 +4,13 @@ import { ItemTypes } from "../dnd/constants.js";
 import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
-export default function Todo({ todo, index, handleMoveTodo }) {
+export default function Todo({ todo, index, handleMoveTodo, hideOnDrag }) {
   const targetRef = useRef();
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
   });
+  const [hide, setHide] = useState(hideOnDrag);
 
   //clear default drag preview
   useEffect(() => {
@@ -19,6 +20,17 @@ export default function Todo({ todo, index, handleMoveTodo }) {
     // eslint-disable-next-line
   }, []);
 
+  const [{ isOver, item, canDrop }, drop] = useDrop({
+    accept: ItemTypes.TODO,
+    drop: (todo) => handleMoveTodo(todo, index, "middle"),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      item: monitor.getItem(),
+      canDrop: monitor.canDrop(),
+    }),
+    canDrop: (todo) => todo.index !== index,
+  });
+
   //get mounted dom dimensions
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -27,7 +39,11 @@ export default function Todo({ todo, index, handleMoveTodo }) {
         height: targetRef.current.offsetHeight,
       });
     }
-  }, []);
+
+    if (isOver) {
+      setHide(isOver);
+    }
+  }, [hideOnDrag, isOver]);
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
@@ -42,20 +58,15 @@ export default function Todo({ todo, index, handleMoveTodo }) {
     }),
   });
 
-  const [{ isOver, item, canDrop }, drop] = useDrop({
-    accept: ItemTypes.TODO,
-    drop: (todo) => handleMoveTodo(todo, index, "middle"),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      item: monitor.getItem(),
-      canDrop: monitor.canDrop(),
-    }),
-    canDrop: (todo) => todo.index !== index,
-  });
+  if (isDragging && hide) {
+    return pug`
+      div(ref=drop)
+    `;
+  }
 
   return pug`
-    div
-      div.p-2(ref=drop)
+    div(ref=drop)
+      div.p-2
         div(ref=drag
           style={
             opacity: isDragging ? 0.5 : 1,
@@ -77,4 +88,5 @@ Todo.propTypes = {
   todo: PropTypes.object,
   index: PropTypes.number,
   handleMoveTodo: PropTypes.func,
+  hideOnDrag: PropTypes.bool,
 };
