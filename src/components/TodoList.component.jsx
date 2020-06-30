@@ -10,7 +10,6 @@ export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
 
   const handleMoveTodo = (fromTodo, toIndex, where) => {
-    console.log(fromTodo);
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
 
