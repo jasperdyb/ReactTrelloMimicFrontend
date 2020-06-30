@@ -4,11 +4,12 @@ import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
 export default function TodoListHeader({ title, handleMoveTodo }) {
-  const [{ isOverOnTop }, drop] = useDrop({
+  const [{ isOverOnTop, item }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => handleMoveTodo(todo, 0, "top"),
     collect: (monitor) => ({
       isOverOnTop: !!monitor.isOver(),
+      item: monitor.getItem(),
     }),
     canDrop: (todo) => todo.index !== 0,
   });
@@ -20,7 +21,9 @@ export default function TodoListHeader({ title, handleMoveTodo }) {
       
       if isOverOnTop 
         .card-body.px-2.pt-2.pb-0
-          span.btn.d-flex.todo-blank(href="#") 
+          span.btn.d-flex.todo-blank(href="#" style={
+            height:item.height
+          }) 
     `;
 }
 

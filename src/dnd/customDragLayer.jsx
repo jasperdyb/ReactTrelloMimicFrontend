@@ -11,12 +11,6 @@ const layerStyles = {
   top: 0,
 };
 
-// const todoStyles = {
-//   display: "inline-block",
-//   transform: "rotate(-7deg)",
-//   WebkitTransform: "rotate(-7deg)",
-// };
-
 function getItemStyles(initialOffset, currentOffset) {
   if (!initialOffset || !currentOffset) {
     return {
@@ -24,7 +18,7 @@ function getItemStyles(initialOffset, currentOffset) {
     };
   }
   let { x, y } = currentOffset;
-  const transform = `translate(${x}px, ${y}px)`;
+  const transform = `translate(${x}px, ${y}px) rotate(5deg)`;
   return {
     transform,
     WebkitTransform: transform,
@@ -47,10 +41,8 @@ const CustomDragLayer = () => {
   }));
   function renderItem() {
     const todoStyles = {
-      display: "inline-block",
-      transform: "rotate(-7deg)",
-      WebkitTransform: "rotate(-7deg)",
       width: item.width,
+      height: item.height,
     };
 
     switch (itemType) {

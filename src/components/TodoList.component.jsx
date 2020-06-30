@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-// import { ItemTypes } from "../dnd/constants.js";
-// import { useDrop } from "react-dnd";
 import Todo from "./Todo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
@@ -40,7 +38,7 @@ export default function TodoList(props) {
     .d-flex.justify-content-center
       .card.todo-list
         TodoListHeader( title ="Todo List" handleMoveTodo=handleMoveTodo)
-        .card-body.p-2
+        .card-body.px-2.pt-2.pb-0
           div #{Todos}
 
         TodoListFooter(handleMoveTodo =handleMoveTodo)

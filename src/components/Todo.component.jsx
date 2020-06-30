@@ -19,6 +19,7 @@ export default function Todo({ todo, index, handleMoveTodo }) {
     // eslint-disable-next-line
   }, []);
 
+  //get mounted dom dimensions
   useLayoutEffect(() => {
     if (targetRef.current) {
       setDimensions({
@@ -34,23 +35,25 @@ export default function Todo({ todo, index, handleMoveTodo }) {
       todo,
       index,
       width: dimensions.width,
+      height: dimensions.height,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
 
-  const [{ isOver }, drop] = useDrop({
+  const [{ isOver, item }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => handleMoveTodo(todo, index, "middle"),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      item: monitor.getItem(),
     }),
     canDrop: (todo) => todo.index !== index,
   });
 
   return pug`
-    div(ref=targetRef)
+    div.mb-2(ref=targetRef)
       div(ref=drag
         style={
           opacity: isDragging ? 0.5 : 1,
@@ -67,7 +70,9 @@ export default function Todo({ todo, index, handleMoveTodo }) {
           a.btn.d-flex.todo-item(href="#") #{todo.name }
 
         if isOver 
-          span.btn.d-flex.todo-blank.my-2(href="#") 
+          span.btn.d-flex.todo-blank.my-2(href="#" style={
+            height:item.height
+          }) 
   `;
 }
 
