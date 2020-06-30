@@ -53,24 +53,24 @@ export default function Todo({ todo, index, handleMoveTodo }) {
   });
 
   return pug`
-    div(ref=targetRef)
-      div.pb-2(ref=drop
+    div.p-2(ref=drop
+      style={
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+      })
+      div(ref=drag
         style={
-          position: 'relative',
-          width: '100%',
-          height: '100%',
+          opacity: isDragging ? 0.5 : 1,
+          fontSize: 25,
+          fontWeight: 'bold',
+          cursor: 'move',
         })
-        div(ref=drag
-          style={
-            opacity: isDragging ? 0.5 : 1,
-            fontSize: 25,
-            fontWeight: 'bold',
-            cursor: 'move',
-          })
-          a.btn.d-flex.todo-item(href="#") #{todo.name }
+        a.btn.d-flex.todo-item(href="#" ref=targetRef) #{todo.name }
 
-        if isOver 
-          span.btn.d-flex.todo-blank.mt-2.mb-0(href="#" style={
+      if isOver 
+        div.pt-2.pb-0
+          span.btn.d-flex.todo-blank(href="#" style={
             height:item.height
           }) 
   `;

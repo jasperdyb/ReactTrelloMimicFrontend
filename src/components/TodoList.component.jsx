@@ -38,7 +38,7 @@ export default function TodoList(props) {
     .d-flex.justify-content-center
       .card.todo-list
         TodoListHeader( title ="Todo List" handleMoveTodo=handleMoveTodo)
-        .card-body.px-2.pt-2.pb-0
+        .card-body.p-0
           div #{Todos}
 
         TodoListFooter(handleMoveTodo =handleMoveTodo)
