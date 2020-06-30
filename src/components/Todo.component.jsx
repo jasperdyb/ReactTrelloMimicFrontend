@@ -42,34 +42,31 @@ export default function Todo({ todo, index, handleMoveTodo }) {
     }),
   });
 
-  const [{ isOver, item }, drop] = useDrop({
+  const [{ isOver, item, canDrop }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => handleMoveTodo(todo, index, "middle"),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
       item: monitor.getItem(),
+      canDrop: monitor.canDrop(),
     }),
     canDrop: (todo) => todo.index !== index,
   });
 
   return pug`
-    div.p-2(ref=drop
-      style={
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-      })
-      div(ref=drag
-        style={
-          opacity: isDragging ? 0.5 : 1,
-          fontSize: 25,
-          fontWeight: 'bold',
-          cursor: 'move',
-        })
-        a.btn.d-flex.todo-item(href="#" ref=targetRef) #{todo.name }
+    div
+      div.p-2(ref=drop)
+        div(ref=drag
+          style={
+            opacity: isDragging ? 0.5 : 1,
+            fontSize: 25,
+            fontWeight: 'bold',
+            cursor: 'move',
+          })
+          a.btn.d-flex.todo-item(href="#" ref=targetRef) #{todo.name }
 
-      if isOver 
-        div.pt-2.pb-0
+      if isOver && canDrop
+        div.p-2.pb-0
           span.btn.d-flex.todo-blank(href="#" style={
             height:item.height
           }) 
