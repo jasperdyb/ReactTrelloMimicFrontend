@@ -15,8 +15,9 @@ export default function TodoListFooter({ handleMoveTodo }) {
 
   return pug`
     div(ref=drop)
-      if isOverOnBottom 
-        span.btn.d-flex.todo-blank(href="#")   
+      if isOverOnBottom
+        .card-body.px-2.pt-0.pb-2
+          span.btn.d-flex.todo-blank(href="#")   
 
       .card-footer
         a.btn.btn-light(href="#") + Add todo

@@ -10,6 +10,7 @@ export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
 
   const handleMoveTodo = (fromTodo, toIndex, where) => {
+    console.log(fromTodo);
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
 
@@ -35,24 +36,6 @@ export default function TodoList(props) {
       Todo(key=index ...propsToTodo ) 
     `;
   });
-
-  // const [{ isOverOnTop }, drop] = useDrop({
-  //   accept: ItemTypes.TODO,
-  //   drop: (todo) => handleMoveTodo(todo, 0, "top"),
-  //   collect: (monitor) => ({
-  //     isOverOnTop: !!monitor.isOver(),
-  //   }),
-  //   canDrop: (todo) => todo.index !== 0,
-  // });
-
-  // const [{ isOverOnBottom }, dropOnBottom] = useDrop({
-  //   accept: ItemTypes.TODO,
-  //   dropOnBottom: (todo) => handleMoveTodo(todo, todoItems.length - 1),
-  //   collect: (monitor) => ({
-  //     isOver: !!monitor.isOver(),
-  //   }),
-  //   canDrop: (todo) => todo.index !== todoItems.length - 1,
-  // });
 
   return pug`
     .d-flex.justify-content-center

@@ -43,7 +43,7 @@ export default function Todo({ todo, index, handleMoveTodo }) {
         a.btn.d-flex.todo-item(href="#") #{todo.name}
 
       if isOver 
-        span.btn.d-flex.todo-blank(href="#") 
+        span.btn.d-flex.todo-blank.my-2(href="#") 
   `;
 }
 

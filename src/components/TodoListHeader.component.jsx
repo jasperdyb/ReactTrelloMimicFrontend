@@ -19,7 +19,8 @@ export default function TodoListHeader({ title, handleMoveTodo }) {
         h5.card-title #{title}
       
       if isOverOnTop 
-        span.btn.d-flex.todo-blank(href="#") 
+        .card-body.px-2.pt-2.pb-0
+          span.btn.d-flex.todo-blank(href="#") 
     `;
 }
 
