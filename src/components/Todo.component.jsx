@@ -17,41 +17,6 @@ export default function Todo({
     height: 0,
   });
 
-  //clear default drag preview
-  useEffect(() => {
-    preview(getEmptyImage(), {
-      captureDraggingState: true,
-    });
-    // eslint-disable-next-line
-  }, []);
-
-  const [{ isOver, item, canDrop }, drop] = useDrop({
-    accept: ItemTypes.TODO,
-    drop: (todo) => {
-      handleMoveTodo(todo, index, "middle");
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      item: monitor.getItem(),
-      canDrop: monitor.canDrop(),
-    }),
-    canDrop: (todo) => todo.index !== index,
-  });
-
-  //get mounted dom dimensions
-  useLayoutEffect(() => {
-    if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
-      });
-    }
-
-    if (isOver) {
-      setHideOnDrag(isOver);
-    }
-  }, [setHideOnDrag, isOver]);
-
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: ItemTypes.TODO,
@@ -68,6 +33,42 @@ export default function Todo({
     }),
   });
 
+  const [{ isOver, item, canDrop }, drop] = useDrop({
+    accept: ItemTypes.TODO,
+    drop: (todo) => {
+      handleMoveTodo(todo, index, "middle");
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      item: monitor.getItem(),
+      canDrop: monitor.canDrop(),
+    }),
+    canDrop: (todo) => todo.index !== index,
+  });
+
+  //clear default drag preview
+  useEffect(() => {
+    preview(getEmptyImage(), {
+      captureDraggingState: true,
+    });
+    // eslint-disable-next-line
+  }, []);
+
+  //get mounted dom dimensions
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight,
+      });
+    }
+
+    if (isOver) {
+      setHideOnDrag(isOver);
+    }
+  }, [setHideOnDrag, isOver]);
+
+  //DOM while dragging
   if (isDragging && hideOnDrag) {
     return pug`
       div(ref=drop)
