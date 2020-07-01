@@ -7,6 +7,7 @@ export default function TodoListFooter({
   handleMoveTodo,
   setHideOnDrag,
   showNewTodo,
+  handleShowNewTodo,
   handleAddNewTodo,
 }) {
   const [{ isOverOnBottom, item }, drop] = useDrop({
@@ -35,10 +36,10 @@ export default function TodoListFooter({
 
       .card-footer
         if !showNewTodo
-          button.btn.btn-light(onClick=handleAddNewTodo) + Add todo
-          
+          button.btn.btn-light(onClick=handleShowNewTodo) + Add todo
+
         else
-          button.btn.btn-success() New todo
+          button.btn.btn-success(onMouseDown=handleAddNewTodo) New todo
     `;
 }
 
@@ -46,5 +47,6 @@ TodoListFooter.propTypes = {
   handleMoveTodo: PropTypes.func,
   setHideOnDrag: PropTypes.func,
   showNewTodo: PropTypes.bool,
+  handleShowNewTodo: PropTypes.func,
   handleAddNewTodo: PropTypes.func,
 };

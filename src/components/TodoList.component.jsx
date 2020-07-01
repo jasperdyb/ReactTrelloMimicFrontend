@@ -48,12 +48,18 @@ export default function TodoList(props) {
     setTodoItems(newTodos);
   };
 
-  const handleAddNewTodo = () => {
+  const handleShowNewTodo = () => {
     setShowNewTodo(true);
   };
 
+  let hideNewTodo = true;
+
+  const handleAddNewTodo = () => {
+    hideNewTodo = false;
+  };
+
   const handleNewTodoOnBlur = () => {
-    setShowNewTodo(false);
+    if (hideNewTodo) setShowNewTodo(false);
   };
 
   const Todos = todoItems.map((todo, index) => {
@@ -77,6 +83,7 @@ export default function TodoList(props) {
     handleMoveTodo,
     setHideOnDrag,
     showNewTodo,
+    handleShowNewTodo,
     handleAddNewTodo,
   };
 
