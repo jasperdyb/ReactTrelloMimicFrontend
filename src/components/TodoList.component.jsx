@@ -52,6 +52,10 @@ export default function TodoList(props) {
     setShowNewTodo(true);
   };
 
+  const handleNewTodoOnBlur = () => {
+    setShowNewTodo(false);
+  };
+
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
       todo,
@@ -84,7 +88,7 @@ export default function TodoList(props) {
           div #{Todos}
           
           if showNewTodo
-            NewTodoInput
+            NewTodoInput(handleNewTodoOnBlur=handleNewTodoOnBlur)
 
         TodoListFooter(...propsToTodoListFooter)
     `;
