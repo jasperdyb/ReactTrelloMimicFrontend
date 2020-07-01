@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Todo from "./Todo.component";
+import DraggableTodo from "./DraggableTodo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
 import { ItemTypes } from "../dnd/constants.js";
@@ -55,7 +55,7 @@ export default function TodoList(props) {
       setHideOnDrag,
     };
     return pug`
-      Todo(key=index ...propsToTodo ) 
+      DraggableTodo(key=index ...propsToTodo ) 
     `;
   });
 

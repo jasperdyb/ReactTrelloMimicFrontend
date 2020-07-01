@@ -1,7 +1,7 @@
 import React from "react";
 import { useDragLayer } from "react-dnd";
 import { ItemTypes } from "./constants";
-import Todo from "../components/Todo.component";
+import TodoDragPreview from "../components/TodoDragPreview.component";
 
 const layerStyles = {
   position: "fixed",
@@ -18,7 +18,7 @@ function getItemStyles(initialOffset, currentOffset) {
     };
   }
   let { x, y } = currentOffset;
-  const transform = `translate(${x}px, ${y}px) rotate(5deg)`;
+  const transform = `translate(${x}px, ${y}px)`;
   return {
     transform,
     WebkitTransform: transform,
@@ -40,16 +40,10 @@ const CustomDragLayer = () => {
     isDragging: monitor.isDragging(),
   }));
   function renderItem() {
-    const todoStyles = {
-      width: item.width,
-      height: item.height,
-    };
-
     switch (itemType) {
       case ItemTypes.TODO:
         return pug`
-          div(style = todoStyles)
-            Todo(todo=item.todo)
+          TodoDragPreview(todo=item.todo width=item.width height=item.height)
         `;
       default:
         return null;
