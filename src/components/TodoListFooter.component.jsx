@@ -6,12 +6,12 @@ import { useDrop } from "react-dnd";
 export default function TodoListFooter({ handleMoveTodo, setHideOnDrag }) {
   const [{ isOverOnBottom, item }, drop] = useDrop({
     accept: ItemTypes.TODO,
-    drop: (todo) => handleMoveTodo(todo, 0, "bottom"),
+    drop: (todo) => handleMoveTodo(todo, -1, "bottom"),
     collect: (monitor) => ({
       isOverOnBottom: !!monitor.isOver(),
       item: monitor.getItem(),
     }),
-    canDrop: (todo) => todo.index !== 0,
+    // canDrop: (todo) => todo.index !== 0,
   });
 
   useLayoutEffect(() => {

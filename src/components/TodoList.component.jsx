@@ -8,12 +8,20 @@ import { useDrop } from "react-dnd";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
-
   const [hideOnDrag, setHideOnDrag] = useState(false);
+
+  // eslint-disable-next-line
+  const [{}, drop] = useDrop({
+    accept: ItemTypes.TODO,
+    drop: (todo) => {
+      setHideOnDrag(false);
+    },
+  });
 
   const handleMoveTodo = (fromTodo, toIndex, where) => {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
+    console.log(fromIndex);
 
     let newTodos = [];
     switch (where) {
@@ -21,6 +29,7 @@ export default function TodoList(props) {
         newTodos = movedTodo.concat(todoItems);
         break;
       case "bottom":
+        console.log(movedTodo);
         newTodos = todoItems.concat(movedTodo);
         break;
       default:
@@ -36,14 +45,6 @@ export default function TodoList(props) {
 
     setTodoItems(newTodos);
   };
-
-  // eslint-disable-next-line
-  const [{}, drop] = useDrop({
-    accept: ItemTypes.TODO,
-    drop: (todo) => {
-      setHideOnDrag(false);
-    },
-  });
 
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
