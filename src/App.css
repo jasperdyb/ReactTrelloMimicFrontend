@@ -1,12 +1,14 @@
-.App {
-  /* text-align: center; */
-}
-
 .card.todo-list {
   width: 272px;
+  background-color: wheat;
 }
 
 .todo-item {
   position: relative;
   box-shadow: 0px 3px 2px -1px rgba(94, 104, 102, 0.48);
+  background-color: white;
+}
+
+.todo-blank {
+  background-color: Gainsboro;
 }
