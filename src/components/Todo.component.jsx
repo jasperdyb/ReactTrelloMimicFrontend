@@ -4,13 +4,18 @@ import { ItemTypes } from "../dnd/constants.js";
 import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
-export default function Todo({ todo, index, handleMoveTodo, hideOnDrag }) {
+export default function Todo({
+  todo,
+  index,
+  handleMoveTodo,
+  hideOnDrag,
+  setHideOnDrag,
+}) {
   const targetRef = useRef();
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
   });
-  const [hide, setHide] = useState(hideOnDrag);
 
   //clear default drag preview
   useEffect(() => {
@@ -22,7 +27,9 @@ export default function Todo({ todo, index, handleMoveTodo, hideOnDrag }) {
 
   const [{ isOver, item, canDrop }, drop] = useDrop({
     accept: ItemTypes.TODO,
-    drop: (todo) => handleMoveTodo(todo, index, "middle"),
+    drop: (todo) => {
+      handleMoveTodo(todo, index, "middle");
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
       item: monitor.getItem(),
@@ -41,9 +48,9 @@ export default function Todo({ todo, index, handleMoveTodo, hideOnDrag }) {
     }
 
     if (isOver) {
-      setHide(isOver);
+      setHideOnDrag(isOver);
     }
-  }, [hideOnDrag, isOver]);
+  }, [setHideOnDrag, isOver]);
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
@@ -53,12 +60,15 @@ export default function Todo({ todo, index, handleMoveTodo, hideOnDrag }) {
       width: dimensions.width,
       height: dimensions.height,
     },
+    end: () => {
+      setHideOnDrag(false);
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
 
-  if (isDragging && hide) {
+  if (isDragging && hideOnDrag) {
     return pug`
       div(ref=drop)
     `;
@@ -89,4 +99,5 @@ Todo.propTypes = {
   index: PropTypes.number,
   handleMoveTodo: PropTypes.func,
   hideOnDrag: PropTypes.bool,
+  setHideOnDrag: PropTypes.func,
 };

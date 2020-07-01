@@ -1,9 +1,9 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
-export default function TodoListFooter({ handleMoveTodo, hideOnDrag }) {
+export default function TodoListFooter({ handleMoveTodo, setHideOnDrag }) {
   const [{ isOverOnBottom, item }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => handleMoveTodo(todo, 0, "bottom"),
@@ -14,14 +14,11 @@ export default function TodoListFooter({ handleMoveTodo, hideOnDrag }) {
     canDrop: (todo) => todo.index !== 0,
   });
 
-  // eslint-disable-next-line
-  const [hide, setHide] = useState(hideOnDrag);
-
   useLayoutEffect(() => {
     if (isOverOnBottom) {
-      setHide(isOverOnBottom);
+      setHideOnDrag(isOverOnBottom);
     }
-  }, [hideOnDrag, isOverOnBottom]);
+  }, [setHideOnDrag, isOverOnBottom]);
 
   return pug`
     div(ref=drop)
@@ -38,5 +35,5 @@ export default function TodoListFooter({ handleMoveTodo, hideOnDrag }) {
 
 TodoListFooter.propTypes = {
   handleMoveTodo: PropTypes.func,
-  hideOnDrag: PropTypes.bool,
+  setHideOnDrag: PropTypes.func,
 };

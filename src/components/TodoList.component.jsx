@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import Todo from "./Todo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
+import { ItemTypes } from "../dnd/constants.js";
+import { useDrop } from "react-dnd";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
 
-  const [hideOnDrag] = useState(false);
+  const [hideOnDrag, setHideOnDrag] = useState(false);
 
   const handleMoveTodo = (fromTodo, toIndex, where) => {
     const fromIndex = fromTodo.index;
@@ -22,13 +24,26 @@ export default function TodoList(props) {
         newTodos = todoItems.concat(movedTodo);
         break;
       default:
-        const tails = todoItems.splice(toIndex + 1);
+        let tails = [];
+        if (fromIndex < toIndex) {
+          tails = todoItems.splice(toIndex);
+        } else {
+          tails = todoItems.splice(toIndex + 1);
+        }
+
         newTodos = todoItems.concat(movedTodo).concat(tails);
     }
 
-    console.log(newTodos);
     setTodoItems(newTodos);
   };
+
+  // eslint-disable-next-line
+  const [{}, drop] = useDrop({
+    accept: ItemTypes.TODO,
+    drop: (todo) => {
+      setHideOnDrag(false);
+    },
+  });
 
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
@@ -36,18 +51,25 @@ export default function TodoList(props) {
       index,
       handleMoveTodo,
       hideOnDrag,
+      setHideOnDrag,
     };
     return pug`
       Todo(key=index ...propsToTodo ) 
     `;
   });
 
-  const propsToTodoListHeader = { handleMoveTodo, hideOnDrag };
-  const propsToTodoListFooter = { handleMoveTodo, hideOnDrag };
+  const propsToTodoListHeader = {
+    handleMoveTodo,
+    setHideOnDrag,
+  };
+  const propsToTodoListFooter = {
+    handleMoveTodo,
+    setHideOnDrag,
+  };
 
   return pug`
     .d-flex.justify-content-center
-      .card.todo-list
+      .card.todo-list(ref =drop)
         TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
         .card-body.p-0
           div #{Todos}
