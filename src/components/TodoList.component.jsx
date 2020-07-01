@@ -11,6 +11,7 @@ export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
+  const [newTodo, setNewTodo] = useState("");
 
   // eslint-disable-next-line
   const [{}, drop] = useDrop({
@@ -52,14 +53,33 @@ export default function TodoList(props) {
     setShowNewTodo(true);
   };
 
-  let hideNewTodo = true;
-
   const handleAddNewTodo = () => {
+    if (newTodo) {
+      const newTodoItem = [
+        {
+          name: newTodo,
+          finished: false,
+        },
+      ];
+      const newTodos = todoItems.concat(newTodoItem);
+      setTodoItems(newTodos);
+
+      setNewTodo("");
+      hideNewTodo = true;
+      setShowNewTodo(false);
+    }
+  };
+
+  let hideNewTodo = true;
+  //fire before onBlur to prevent setShowNewTodo(false)
+  const handlePreventNewTodoOnBlur = () => {
     hideNewTodo = false;
   };
 
   const handleNewTodoOnBlur = () => {
-    if (hideNewTodo) setShowNewTodo(false);
+    if (hideNewTodo) {
+      setShowNewTodo(false);
+    }
   };
 
   const Todos = todoItems.map((todo, index) => {
@@ -84,7 +104,12 @@ export default function TodoList(props) {
     setHideOnDrag,
     showNewTodo,
     handleShowNewTodo,
+    handlePreventNewTodoOnBlur,
     handleAddNewTodo,
+  };
+  const propsToNewTodoInput = {
+    handleNewTodoOnBlur,
+    setNewTodo,
   };
 
   return pug`
@@ -95,7 +120,7 @@ export default function TodoList(props) {
           div #{Todos}
           
           if showNewTodo
-            NewTodoInput(handleNewTodoOnBlur=handleNewTodoOnBlur)
+            NewTodoInput(...propsToNewTodoInput)
 
         TodoListFooter(...propsToTodoListFooter)
     `;
