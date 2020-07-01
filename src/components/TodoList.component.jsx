@@ -3,12 +3,14 @@ import PropTypes from "prop-types";
 import DraggableTodo from "./DraggableTodo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
+import NewTodoInput from "./NewTodoInput.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
+  const [showNewTodo, setShowNewTodo] = useState(false);
 
   // eslint-disable-next-line
   const [{}, drop] = useDrop({
@@ -46,6 +48,10 @@ export default function TodoList(props) {
     setTodoItems(newTodos);
   };
 
+  const handleAddNewTodo = () => {
+    setShowNewTodo(true);
+  };
+
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
       todo,
@@ -66,6 +72,8 @@ export default function TodoList(props) {
   const propsToTodoListFooter = {
     handleMoveTodo,
     setHideOnDrag,
+    showNewTodo,
+    handleAddNewTodo,
   };
 
   return pug`
@@ -74,6 +82,9 @@ export default function TodoList(props) {
         TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
         .card-body.p-0
           div #{Todos}
+          
+          if showNewTodo
+            NewTodoInput
 
         TodoListFooter(...propsToTodoListFooter)
     `;
