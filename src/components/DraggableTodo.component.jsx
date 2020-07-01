@@ -69,10 +69,10 @@ export default function DraggableTodo({
     }
   }, [setHideOnDrag, isOver]);
 
-  //DOM while dragging
+  // DOM while dragging
   if (isDragging && hideOnDrag) {
     return pug`
-      div(ref=drop)
+      div
     `;
   }
 
@@ -81,11 +81,11 @@ export default function DraggableTodo({
       div.p-2
         div(ref=drag)
           div(ref=targetRef )
-            Todo(todo=todo isDragging=isDragging)
+            Todo(todo=todo isDragging=isDragging hideOnDrag=hideOnDrag)
 
       if isOver && canDrop
         div.p-2.pb-0
-          span.btn.d-flex.todo-blank(href="#" style={
+          span.btn.d-flex.todo-blank(style={
             height:item.height
           }) 
   `;
