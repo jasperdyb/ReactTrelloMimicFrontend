@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import QuickTodoEditTextarea from "./QuickTodoEditTextarea.component";
 
-export default function QuickTodoEdit({ dimensions }) {
+const QuickTodoEdit = React.forwardRef(({ dimensions }, focusRef) => {
   return pug`
     #quickTodoEdit.modal( 
       data-keyboard="false", 
@@ -10,10 +10,12 @@ export default function QuickTodoEdit({ dimensions }) {
       role="dialog", 
       aria-labelledby="staticBackdropLabel", 
       aria-hidden="true")
-      QuickTodoEditTextarea(dimensions=dimensions)
+      QuickTodoEditTextarea(dimensions=dimensions ref=focusRef)
     `;
-}
+});
 
 QuickTodoEdit.propTypes = {
   dimensions: PropTypes.object,
 };
+
+export default QuickTodoEdit;

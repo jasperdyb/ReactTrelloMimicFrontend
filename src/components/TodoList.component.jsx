@@ -13,7 +13,8 @@ export default function TodoList(props) {
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
-  const NewTodoInputRef = useRef(null);
+  const newTodoInputRef = useRef(null);
+  const quickTodoEditRef = useRef(null);
   const [quickEditDimensions, setQuickEditDimensions] = useState({
     top: 0,
     left: 0,
@@ -81,7 +82,7 @@ export default function TodoList(props) {
     if (newTodo) {
       AddNewTodo(newTodo);
     } else {
-      NewTodoInputRef.current.focus();
+      newTodoInputRef.current.focus();
       hideNewTodo = true;
     }
   };
@@ -107,6 +108,7 @@ export default function TodoList(props) {
       hideOnDrag,
       setHideOnDrag,
       setQuickEditDimensions,
+      quickTodoEditRef,
     };
     return pug`
       DraggableTodo(key=index ...propsToTodo ) 
@@ -139,11 +141,11 @@ export default function TodoList(props) {
             div #{Todos}
             
             if showNewTodo
-              NewTodoInput(ref=NewTodoInputRef ...propsToNewTodoInput)
+              NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
 
           TodoListFooter(...propsToTodoListFooter)
 
-      QuickTodoEdit(dimensions=quickEditDimensions)
+      QuickTodoEdit(ref=quickTodoEditRef dimensions=quickEditDimensions )
     `;
 }
 

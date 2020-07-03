@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../css/QuickTodoEditTextarea.css";
 
-export default function QuickTodoEditTextarea({ dimensions }) {
+const QuickTodoEditTextarea = React.forwardRef(({ dimensions }, focusRef) => {
   const styles = {
     position: "relative",
     margin: 0,
@@ -13,10 +13,12 @@ export default function QuickTodoEditTextarea({ dimensions }) {
     div.modal-dialog(style=styles)
       div.modal-content
         div.input-group
-          textarea.form-control
+          textarea.form-control(ref=focusRef)
   `;
-}
+});
 
 QuickTodoEditTextarea.propTypes = {
   dimensions: PropTypes.object,
 };
+
+export default QuickTodoEditTextarea;

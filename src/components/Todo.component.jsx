@@ -10,6 +10,7 @@ export default function Todo({
   hideOnDrag,
   isHover,
   setQuickEditDimensions,
+  quickTodoEditRef,
 }) {
   const targetRef = useRef();
 
@@ -20,6 +21,8 @@ export default function Todo({
       left: left,
       width: width,
     });
+
+    quickTodoEditRef.current.focus();
   };
 
   //TODO 預設預覽: todo原位顯示灰色塊
@@ -39,4 +42,5 @@ Todo.propTypes = {
   hideOnDrag: PropTypes.bool,
   isHover: PropTypes.bool,
   setQuickEditDimensions: PropTypes.func,
+  quickTodoEditRef: PropTypes.object,
 };
