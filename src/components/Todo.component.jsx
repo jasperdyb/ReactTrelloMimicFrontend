@@ -11,6 +11,7 @@ export default function Todo({
   isHover,
   setQuickEditDimensions,
   quickTodoEditRef,
+  setQuickEditValue,
 }) {
   const targetRef = useRef();
 
@@ -21,7 +22,7 @@ export default function Todo({
       left: left,
       width: width,
     });
-
+    setQuickEditValue(todo.name);
     quickTodoEditRef.current.focus();
   };
 
@@ -43,4 +44,5 @@ Todo.propTypes = {
   isHover: PropTypes.bool,
   setQuickEditDimensions: PropTypes.func,
   quickTodoEditRef: PropTypes.object,
+  setQuickEditValue: PropTypes.func,
 };

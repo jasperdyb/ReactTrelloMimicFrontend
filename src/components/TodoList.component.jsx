@@ -13,13 +13,15 @@ export default function TodoList(props) {
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
-  const newTodoInputRef = useRef(null);
-  const quickTodoEditRef = useRef(null);
   const [quickEditDimensions, setQuickEditDimensions] = useState({
     top: 0,
     left: 0,
     width: 0,
   });
+  const [quickEditValue, setQuickEditValue] = useState("");
+
+  const newTodoInputRef = useRef(null);
+  const quickTodoEditRef = useRef(null);
 
   let hideNewTodo = true;
 
@@ -109,6 +111,7 @@ export default function TodoList(props) {
       setHideOnDrag,
       setQuickEditDimensions,
       quickTodoEditRef,
+      setQuickEditValue,
     };
     return pug`
       DraggableTodo(key=index ...propsToTodo ) 
@@ -131,6 +134,10 @@ export default function TodoList(props) {
     handleNewTodoOnBlur,
     setNewTodo,
   };
+  const propsTOQuickTodoEdit = {
+    dimensions: quickEditDimensions,
+    quickEditValue,
+  };
 
   return pug`
     div
@@ -145,7 +152,7 @@ export default function TodoList(props) {
 
           TodoListFooter(...propsToTodoListFooter)
 
-      QuickTodoEdit(ref=quickTodoEditRef dimensions=quickEditDimensions )
+      QuickTodoEdit(ref=quickTodoEditRef ...propsTOQuickTodoEdit )
     `;
 }
 
