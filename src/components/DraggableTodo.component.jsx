@@ -11,6 +11,7 @@ export default function DraggableTodo({
   handleMoveTodo,
   hideOnDrag,
   setHideOnDrag,
+  setQuickEditDimensions,
 }) {
   const targetRef = useRef();
   const [isHover, setIsHover] = useState(false);
@@ -90,6 +91,7 @@ export default function DraggableTodo({
     isDragging,
     hideOnDrag,
     isHover,
+    setQuickEditDimensions,
   };
 
   return pug`
@@ -113,4 +115,5 @@ DraggableTodo.propTypes = {
   handleMoveTodo: PropTypes.func,
   hideOnDrag: PropTypes.bool,
   setHideOnDrag: PropTypes.func,
+  setQuickEditDimensions: PropTypes.func,
 };

@@ -4,6 +4,7 @@ import DraggableTodo from "./DraggableTodo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
 import NewTodoInput from "./NewTodoInput.component";
+import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
@@ -13,6 +14,11 @@ export default function TodoList(props) {
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
   const NewTodoInputRef = useRef(null);
+  const [quickEditDimensions, setQuickEditDimensions] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
 
   let hideNewTodo = true;
 
@@ -100,6 +106,7 @@ export default function TodoList(props) {
       handleMoveTodo,
       hideOnDrag,
       setHideOnDrag,
+      setQuickEditDimensions,
     };
     return pug`
       DraggableTodo(key=index ...propsToTodo ) 
@@ -124,16 +131,19 @@ export default function TodoList(props) {
   };
 
   return pug`
-    .d-flex.justify-content-center
-      .card.todo-list(ref =drop)
-        TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
-        .card-body.p-0
-          div #{Todos}
-          
-          if showNewTodo
-            NewTodoInput(ref=NewTodoInputRef ...propsToNewTodoInput)
+    div
+      .d-flex.justify-content-center
+        .card.todo-list(ref =drop)
+          TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
+          .card-body.p-0
+            div #{Todos}
+            
+            if showNewTodo
+              NewTodoInput(ref=NewTodoInputRef ...propsToNewTodoInput)
 
-        TodoListFooter(...propsToTodoListFooter)
+          TodoListFooter(...propsToTodoListFooter)
+
+      QuickTodoEdit(dimensions=quickEditDimensions)
     `;
 }
 
