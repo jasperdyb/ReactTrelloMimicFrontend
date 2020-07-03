@@ -1,0 +1,12 @@
+button {
+  border-style: hidden;
+  border-radius: 5px;
+}
+
+button:active {
+  background-color: lightgray;
+}
+
+button:focus {
+  outline: none;
+}
