@@ -13,6 +13,7 @@ export default function DraggableTodo({
   setHideOnDrag,
 }) {
   const targetRef = useRef();
+  const [isHover, setIsHover] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
@@ -69,6 +70,14 @@ export default function DraggableTodo({
     }
   }, [setHideOnDrag, isOver]);
 
+  const handleOnHover = () => {
+    setIsHover(true);
+  };
+
+  const handleOnLeave = () => {
+    setIsHover(false);
+  };
+
   // DOM while dragging
   if (isDragging && hideOnDrag) {
     return pug`
@@ -76,12 +85,19 @@ export default function DraggableTodo({
     `;
   }
 
+  const propsToTodo = {
+    todo,
+    isDragging,
+    hideOnDrag,
+    isHover,
+  };
+
   return pug`
     div(ref=drop)
       div.p-2
-        div(ref=drag)
+        div(ref=drag onMouseOver=handleOnHover onMouseLeave = handleOnLeave)
           div(ref=targetRef )
-            Todo(todo=todo isDragging=isDragging hideOnDrag=hideOnDrag)
+            Todo(...propsToTodo )
 
       if isOver && canDrop
         div.p-2.pb-0

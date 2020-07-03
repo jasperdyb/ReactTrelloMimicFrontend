@@ -1,6 +1,7 @@
 button {
   border-style: hidden;
   border-radius: 5px;
+  display: inline-block;
 }
 
 button:active {
