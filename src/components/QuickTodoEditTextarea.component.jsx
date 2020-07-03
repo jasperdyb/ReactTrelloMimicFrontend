@@ -10,11 +10,16 @@ const QuickTodoEditTextarea = React.forwardRef(
       ...dimensions,
     };
 
+    const handleOnFocus = (event) => {
+      const target = event.target;
+      setTimeout(() => target.select(), 0); //make select async
+    };
+
     return pug`
       div.modal-dialog(style=styles)
         div.modal-content
           div.input-group
-            textarea.form-control(ref=focusRef defaultValue=todoValue)
+            textarea.form-control(ref=focusRef defaultValue=todoValue onFocus=handleOnFocus)
     `;
   }
 );

@@ -23,6 +23,7 @@ export default function Todo({
       width: width,
     });
     setQuickEditValue(todo.name);
+
     quickTodoEditRef.current.focus();
   };
 
