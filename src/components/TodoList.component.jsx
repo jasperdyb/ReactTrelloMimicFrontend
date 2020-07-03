@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import DraggableTodo from "./DraggableTodo.component";
 import TodoListHeader from "./TodoListHeader.component";
@@ -12,6 +12,9 @@ export default function TodoList(props) {
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
+  const NewTodoInputRef = useRef(null);
+
+  let hideNewTodo = true;
 
   // eslint-disable-next-line
   const [{}, drop] = useDrop({
@@ -53,31 +56,39 @@ export default function TodoList(props) {
     setShowNewTodo(true);
   };
 
+  function AddNewTodo(newTodo) {
+    const newTodoItem = [
+      {
+        name: newTodo,
+        finished: false,
+      },
+    ];
+    const newTodos = todoItems.concat(newTodoItem);
+    setTodoItems(newTodos);
+
+    setNewTodo("");
+    hideNewTodo = true;
+    setShowNewTodo(false);
+  }
+
   const handleAddNewTodo = () => {
     if (newTodo) {
-      const newTodoItem = [
-        {
-          name: newTodo,
-          finished: false,
-        },
-      ];
-      const newTodos = todoItems.concat(newTodoItem);
-      setTodoItems(newTodos);
-
-      setNewTodo("");
+      AddNewTodo(newTodo);
+    } else {
+      NewTodoInputRef.current.focus();
       hideNewTodo = true;
-      setShowNewTodo(false);
     }
   };
 
-  let hideNewTodo = true;
   //fire before onBlur to prevent setShowNewTodo(false)
   const handlePreventNewTodoOnBlur = () => {
     hideNewTodo = false;
   };
 
   const handleNewTodoOnBlur = () => {
-    if (hideNewTodo) {
+    if (newTodo) {
+      AddNewTodo(newTodo);
+    } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
   };
@@ -120,7 +131,7 @@ export default function TodoList(props) {
           div #{Todos}
           
           if showNewTodo
-            NewTodoInput(...propsToNewTodoInput)
+            NewTodoInput(ref=NewTodoInputRef ...propsToNewTodoInput)
 
         TodoListFooter(...propsToTodoListFooter)
     `;
