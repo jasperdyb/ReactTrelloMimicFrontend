@@ -7,8 +7,6 @@ import NewTodoInput from "./NewTodoInput.component";
 import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
-import * as $ from "jquery";
-import "bootstrap";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
@@ -16,6 +14,7 @@ export default function TodoList(props) {
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
   const [quickEditStates, setQuickEditStates] = useState({
+    show: false,
     dimensions: { top: 0, left: 0, width: 0 },
     value: "",
     index: -1,
@@ -100,9 +99,9 @@ export default function TodoList(props) {
       });
     }
 
-    $("#quickTodoEdit").modal("hide");
-    $("body").removeClass("modal-open");
-    $(".modal-backdrop").remove();
+    setQuickEditStates({
+      show: false,
+    });
   }
   //fire before onBlur to prevent setShowNewTodo(false)
   function handlePreventNewTodoOnBlur() {
@@ -155,6 +154,7 @@ export default function TodoList(props) {
   };
   const propsToQuickTodoEdit = {
     quickEditStates,
+    setQuickEditStates,
     handleUpdateTodo,
     handleDeleteTodo,
   };
@@ -172,7 +172,8 @@ export default function TodoList(props) {
 
           TodoListFooter(...propsToTodoListFooter)
 
-      QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
+      if quickEditStates.show
+        QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
     `;
 }
 

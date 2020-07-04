@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import "../css/Todo.css";
-import * as $ from "jquery";
-import "bootstrap";
 
 export default function Todo({
   todo,
@@ -22,6 +20,7 @@ export default function Todo({
 
     const { top, left, width } = targetRef.current.getBoundingClientRect();
     setQuickEditStates({
+      show: true,
       dimensions: {
         top: top,
         left: left,
@@ -30,10 +29,6 @@ export default function Todo({
       value: todo.name,
       index,
     });
-
-    $("#quickTodoEdit").modal("show");
-
-    quickTodoEditRef.current.focus();
   };
 
   //TODO 預設預覽: todo原位顯示灰色塊
