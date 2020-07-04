@@ -103,6 +103,21 @@ export default function TodoList(props) {
       show: false,
     });
   }
+
+  function handleDeleteTodo(index) {
+    console.log(index);
+
+    let newTodoItems = [...todoItems];
+
+    newTodoItems.splice(index, 1);
+
+    setTodoItems(newTodoItems);
+
+    setQuickEditStates({
+      show: false,
+    });
+  }
+
   //fire before onBlur to prevent setShowNewTodo(false)
   function handlePreventNewTodoOnBlur() {
     hideNewTodo = false;
@@ -114,11 +129,6 @@ export default function TodoList(props) {
     } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
-  }
-
-  function handleDeleteTodo(index) {
-    handlePreventNewTodoOnBlur();
-    console.log(index);
   }
 
   const Todos = todoItems.map((todo, index) => {
