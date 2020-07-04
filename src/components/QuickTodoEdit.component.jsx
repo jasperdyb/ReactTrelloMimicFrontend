@@ -3,22 +3,31 @@ import PropTypes from "prop-types";
 import QuickTodoEditTextarea from "./QuickTodoEditTextarea.component";
 
 const QuickTodoEdit = React.forwardRef(
-  ({ dimensions, quickEditValue }, focusRef) => {
+  ({ quickEditStates, handleUpdateTodo }, focusRef) => {
+    const styles = {
+      show: quickEditStates.show,
+      display: quickEditStates.display,
+    };
+
+    const propsToQuickTodoEditTextarea = {
+      quickEditStates,
+      handleUpdateTodo,
+    };
+
     return pug`
       #quickTodoEdit.modal( 
+        style=styles,
         data-keyboard="false", 
         tabIndex="-1", 
-        role="dialog", 
-        aria-labelledby="staticBackdropLabel", 
-        aria-hidden="true")
-        QuickTodoEditTextarea(dimensions=dimensions ref=focusRef todoValue=quickEditValue)
+        role="dialog")
+        QuickTodoEditTextarea(ref=focusRef ...propsToQuickTodoEditTextarea)
       `;
   }
 );
 
 QuickTodoEdit.propTypes = {
-  dimensions: PropTypes.object,
-  quickEditValue: PropTypes.string,
+  quickEditStates: PropTypes.object,
+  handleUpdateTodo: PropTypes.func,
 };
 
 export default QuickTodoEdit;

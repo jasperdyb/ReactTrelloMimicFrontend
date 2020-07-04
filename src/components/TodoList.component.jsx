@@ -13,12 +13,11 @@ export default function TodoList(props) {
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
-  const [quickEditDimensions, setQuickEditDimensions] = useState({
-    top: 0,
-    left: 0,
-    width: 0,
+  const [quickEditStates, setQuickEditStates] = useState({
+    dimensions: { top: 0, left: 0, width: 0 },
+    value: "",
+    index: -1,
   });
-  const [quickEditValue, setQuickEditValue] = useState("");
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -81,6 +80,7 @@ export default function TodoList(props) {
   }
 
   const handleAddNewTodo = () => {
+    console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
     } else {
@@ -89,6 +89,17 @@ export default function TodoList(props) {
     }
   };
 
+  const handleUpdateTodo = (index, newTodoName) => {
+    if (todoItems[index] !== newTodoName && newTodoName) {
+      let newTodoItems = [...todoItems];
+      newTodoItems[index].name = newTodoName;
+      setTodoItems(newTodoItems);
+      setQuickEditStates({
+        ...quickEditStates,
+        value: "",
+      });
+    }
+  };
   //fire before onBlur to prevent setShowNewTodo(false)
   const handlePreventNewTodoOnBlur = () => {
     hideNewTodo = false;
@@ -109,9 +120,8 @@ export default function TodoList(props) {
       handleMoveTodo,
       hideOnDrag,
       setHideOnDrag,
-      setQuickEditDimensions,
+      setQuickEditStates,
       quickTodoEditRef,
-      setQuickEditValue,
     };
     return pug`
       DraggableTodo(key=index ...propsToTodo ) 
@@ -134,9 +144,9 @@ export default function TodoList(props) {
     handleNewTodoOnBlur,
     setNewTodo,
   };
-  const propsTOQuickTodoEdit = {
-    dimensions: quickEditDimensions,
-    quickEditValue,
+  const propsToQuickTodoEdit = {
+    quickEditStates,
+    handleUpdateTodo,
   };
 
   return pug`
@@ -152,7 +162,7 @@ export default function TodoList(props) {
 
           TodoListFooter(...propsToTodoListFooter)
 
-      QuickTodoEdit(ref=quickTodoEditRef ...propsTOQuickTodoEdit )
+      QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
     `;
 }
 

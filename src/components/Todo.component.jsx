@@ -6,23 +6,26 @@ import "../css/Todo.css";
 
 export default function Todo({
   todo,
+  index,
   isDragging,
   hideOnDrag,
   isHover,
-  setQuickEditDimensions,
+  setQuickEditStates,
   quickTodoEditRef,
-  setQuickEditValue,
 }) {
   const targetRef = useRef();
 
   const handleClick = () => {
     const { top, left, width } = targetRef.current.getBoundingClientRect();
-    setQuickEditDimensions({
-      top: top,
-      left: left,
-      width: width,
+    setQuickEditStates({
+      dimensions: {
+        top: top,
+        left: left,
+        width: width,
+      },
+      value: todo.name,
+      index,
     });
-    setQuickEditValue(todo.name);
 
     quickTodoEditRef.current.focus();
   };
@@ -40,10 +43,10 @@ export default function Todo({
 
 Todo.propTypes = {
   todo: PropTypes.object,
+  index: PropTypes.number,
   isDragging: PropTypes.bool,
   hideOnDrag: PropTypes.bool,
   isHover: PropTypes.bool,
-  setQuickEditDimensions: PropTypes.func,
+  setQuickEditStates: PropTypes.func,
   quickTodoEditRef: PropTypes.object,
-  setQuickEditValue: PropTypes.func,
 };
