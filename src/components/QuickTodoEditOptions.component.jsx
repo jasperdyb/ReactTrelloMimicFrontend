@@ -1,8 +1,8 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import "../css/QuickTodoEditOptions.css";
 
-export default function QuickTodoEditOptions() {
+export default function QuickTodoEditOptions({ index, handleDeleteTodo }) {
   return pug`
     div.options
       ul.p-1
@@ -10,6 +10,11 @@ export default function QuickTodoEditOptions() {
           button.option-button Edit tag
 
         li
-          button.option-button Delete
+          button.option-button(onClick=(e)=>handleDeleteTodo(index)) Delete
   `;
 }
+
+QuickTodoEditOptions.propTypes = {
+  index: PropTypes.number,
+  handleDeleteTodo: PropTypes.func,
+};

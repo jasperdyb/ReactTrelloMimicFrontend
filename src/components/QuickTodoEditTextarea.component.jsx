@@ -4,7 +4,7 @@ import QuickTodoEditOptions from "./QuickTodoEditOptions.component";
 import "../css/QuickTodoEditTextarea.css";
 
 const QuickTodoEditTextarea = React.forwardRef(
-  ({ quickEditStates, handleUpdateTodo }, focusRef) => {
+  ({ quickEditStates, handleUpdateTodo, handleDeleteTodo }, focusRef) => {
     const [editedTodo, setEditedTodo] = useState("");
 
     const styles = {
@@ -29,7 +29,7 @@ const QuickTodoEditTextarea = React.forwardRef(
 
     const handleOnBlur = () => {
       setEditedTodo("");
-      handleUpdateTodo(quickEditStates.index, editedTodo);
+      // handleUpdateTodo(quickEditStates.index, editedTodo);
     };
 
     return pug`
@@ -45,7 +45,7 @@ const QuickTodoEditTextarea = React.forwardRef(
           button.btn.btn-success.mt-2.save-button(
             data-toggle="modal" data-target="#quickTodoEdit"
             onClick = (e)=>handleUpdateTodo(quickEditStates.index,editedTodo)) Save
-          QuickTodoEditOptions
+          QuickTodoEditOptions(index=quickEditStates.index handleDeleteTodo=handleDeleteTodo)
     `;
   }
 );
@@ -53,6 +53,7 @@ const QuickTodoEditTextarea = React.forwardRef(
 QuickTodoEditTextarea.propTypes = {
   quickEditStates: PropTypes.object,
   handleUpdateTodo: PropTypes.func,
+  handleDeleteTodo: PropTypes.func,
 };
 
 export default QuickTodoEditTextarea;

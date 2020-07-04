@@ -34,7 +34,7 @@ export default function TodoList(props) {
     },
   });
 
-  const handleMoveTodo = (fromTodo, toIndex, where) => {
+  function handleMoveTodo(fromTodo, toIndex, where) {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
 
@@ -58,11 +58,11 @@ export default function TodoList(props) {
     }
 
     setTodoItems(newTodos);
-  };
+  }
 
-  const handleShowNewTodo = () => {
+  function handleShowNewTodo() {
     setShowNewTodo(true);
-  };
+  }
 
   function AddNewTodo(newTodo) {
     const newTodoItem = [
@@ -79,7 +79,7 @@ export default function TodoList(props) {
     setShowNewTodo(false);
   }
 
-  const handleAddNewTodo = () => {
+  function handleAddNewTodo() {
     console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
@@ -87,9 +87,9 @@ export default function TodoList(props) {
       newTodoInputRef.current.focus();
       hideNewTodo = true;
     }
-  };
+  }
 
-  const handleUpdateTodo = (index, newTodoName) => {
+  function handleUpdateTodo(index, newTodoName) {
     if (todoItems[index] !== newTodoName && newTodoName) {
       let newTodoItems = [...todoItems];
       newTodoItems[index].name = newTodoName;
@@ -103,19 +103,24 @@ export default function TodoList(props) {
     $("#quickTodoEdit").modal("hide");
     $("body").removeClass("modal-open");
     $(".modal-backdrop").remove();
-  };
+  }
   //fire before onBlur to prevent setShowNewTodo(false)
-  const handlePreventNewTodoOnBlur = () => {
+  function handlePreventNewTodoOnBlur() {
     hideNewTodo = false;
-  };
+  }
 
-  const handleNewTodoOnBlur = () => {
+  function handleNewTodoOnBlur() {
     if (newTodo) {
       AddNewTodo(newTodo);
     } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
-  };
+  }
+
+  function handleDeleteTodo(index) {
+    handlePreventNewTodoOnBlur();
+    console.log(index);
+  }
 
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
@@ -151,6 +156,7 @@ export default function TodoList(props) {
   const propsToQuickTodoEdit = {
     quickEditStates,
     handleUpdateTodo,
+    handleDeleteTodo,
   };
 
   return pug`
