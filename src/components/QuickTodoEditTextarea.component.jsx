@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import QuickTodoEditOptions from "./QuickTodoEditOptions.component";
 import "../css/QuickTodoEditTextarea.css";
 
 const QuickTodoEditTextarea = React.forwardRef(
@@ -44,6 +45,7 @@ const QuickTodoEditTextarea = React.forwardRef(
           button.btn.btn-success.mt-2.save-button(
             data-toggle="modal" data-target="#quickTodoEdit"
             onClick = (e)=>handleUpdateTodo(quickEditStates.index,editedTodo)) Save
+          QuickTodoEditOptions
     `;
   }
 );
