@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import "../css/Todo.css";
+import * as $ from "jquery";
+import "bootstrap";
 
 export default function Todo({
   todo,
@@ -15,7 +17,9 @@ export default function Todo({
 }) {
   const targetRef = useRef();
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
+
     const { top, left, width } = targetRef.current.getBoundingClientRect();
     setQuickEditStates({
       dimensions: {
@@ -27,6 +31,8 @@ export default function Todo({
       index,
     });
 
+    $("#quickTodoEdit").modal("show");
+
     quickTodoEditRef.current.focus();
   };
 
@@ -36,7 +42,7 @@ export default function Todo({
     div.btn.d-flex.todo-item(ref=targetRef) 
       div.text-left.mb-1.todo-text #{todo.name}
       if(isHover)
-        button.edit.mr-1(data-toggle="modal" data-target="#quickTodoEdit" onClick=handleClick)
+        button.edit.mr-1( onClick=handleClick onContextMenu=handleClick)
           FontAwesomeIcon(icon=faPencilAlt)
   `;
 }

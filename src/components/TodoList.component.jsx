@@ -7,6 +7,8 @@ import NewTodoInput from "./NewTodoInput.component";
 import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
+import * as $ from "jquery";
+import "bootstrap";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
@@ -97,6 +99,10 @@ export default function TodoList(props) {
         value: "",
       });
     }
+
+    $("#quickTodoEdit").modal("hide");
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
   };
   //fire before onBlur to prevent setShowNewTodo(false)
   const handlePreventNewTodoOnBlur = () => {

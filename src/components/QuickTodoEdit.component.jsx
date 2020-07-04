@@ -4,11 +4,6 @@ import QuickTodoEditTextarea from "./QuickTodoEditTextarea.component";
 
 const QuickTodoEdit = React.forwardRef(
   ({ quickEditStates, handleUpdateTodo }, focusRef) => {
-    const styles = {
-      show: quickEditStates.show,
-      display: quickEditStates.display,
-    };
-
     const propsToQuickTodoEditTextarea = {
       quickEditStates,
       handleUpdateTodo,
@@ -16,7 +11,6 @@ const QuickTodoEdit = React.forwardRef(
 
     return pug`
       #quickTodoEdit.modal( 
-        style=styles,
         data-keyboard="false", 
         tabIndex="-1", 
         role="dialog")
