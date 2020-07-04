@@ -35,7 +35,6 @@ export default function TodoList(props) {
   const handleMoveTodo = (fromTodo, toIndex, where) => {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
-    console.log(fromIndex);
 
     let newTodos = [];
     switch (where) {
@@ -43,7 +42,6 @@ export default function TodoList(props) {
         newTodos = movedTodo.concat(todoItems);
         break;
       case "bottom":
-        console.log(movedTodo);
         newTodos = todoItems.concat(movedTodo);
         break;
       default:

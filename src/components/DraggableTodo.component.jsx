@@ -16,18 +16,14 @@ export default function DraggableTodo({
 }) {
   const targetRef = useRef();
   const [isHover, setIsHover] = useState(false);
-  const [dimensions, setDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: ItemTypes.TODO,
       todo,
       index,
-      width: dimensions.width,
-      height: dimensions.height,
+      width: targetRef.current ? targetRef.current.offsetWidth : 0,
+      height: targetRef.current ? targetRef.current.offsetHeight : 0,
     },
     end: () => {
       setHideOnDrag(false);
@@ -55,18 +51,9 @@ export default function DraggableTodo({
     preview(getEmptyImage(), {
       captureDraggingState: true,
     });
-    // eslint-disable-next-line
-  }, []);
+  }, [preview]);
 
-  //get mounted dom dimensions
   useLayoutEffect(() => {
-    if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
-      });
-    }
-
     if (isOver) {
       setHideOnDrag(isOver);
     }
@@ -102,7 +89,7 @@ export default function DraggableTodo({
       div.p-2
         div(ref=drag onMouseOver=handleOnHover onMouseLeave = handleOnLeave)
           div(ref=targetRef )
-            Todo(...propsToTodo )
+            Todo( ...propsToTodo )
 
       if isOver && canDrop
         div.p-2.pb-0

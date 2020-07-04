@@ -40,6 +40,7 @@ const CustomDragLayer = () => {
     isDragging: monitor.isDragging(),
   }));
   function renderItem() {
+    console.log(item.width, item.height);
     switch (itemType) {
       case ItemTypes.TODO:
         return pug`

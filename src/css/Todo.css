@@ -4,10 +4,31 @@ button {
   display: inline-block;
 }
 
+.todo-item {
+  position: relative;
+  box-shadow: 0px 3px 2px -1px rgba(94, 104, 102, 0.48);
+  background-color: white;
+}
+
+.todo-text {
+  width: 100%;
+  word-wrap: break-word;
+}
+
 button:active {
   background-color: lightgray;
 }
 
 button:focus {
   outline: none;
+}
+
+button:hover {
+  opacity: 1;
+}
+
+.edit {
+  position: absolute;
+  right: 0px;
+  opacity: 0.75;
 }

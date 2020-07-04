@@ -33,10 +33,10 @@ export default function Todo({
   //TODO 預設預覽: todo原位顯示灰色塊
 
   return pug`
-    div.btn.d-flex.align-items-center.justify-content-between.todo-item(ref=targetRef) 
-      div.mb-1 #{todo.name}
+    div.btn.d-flex.todo-item(ref=targetRef) 
+      div.text-left.mb-1.todo-text #{todo.name}
       if(isHover)
-        button.edit(data-toggle="modal" data-target="#quickTodoEdit" onClick=handleClick)
+        button.edit.mr-1(data-toggle="modal" data-target="#quickTodoEdit" onClick=handleClick)
           FontAwesomeIcon(icon=faPencilAlt)
   `;
 }
