@@ -4,15 +4,25 @@ import DraggableTodo from "./DraggableTodo.component";
 import TodoListHeader from "./TodoListHeader.component";
 import TodoListFooter from "./TodoListFooter.component";
 import NewTodoInput from "./NewTodoInput.component";
+import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
+import * as $ from "jquery";
+import "bootstrap";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
-  const NewTodoInputRef = useRef(null);
+  const [quickEditStates, setQuickEditStates] = useState({
+    dimensions: { top: 0, left: 0, width: 0 },
+    value: "",
+    index: -1,
+  });
+
+  const newTodoInputRef = useRef(null);
+  const quickTodoEditRef = useRef(null);
 
   let hideNewTodo = true;
 
@@ -27,7 +37,6 @@ export default function TodoList(props) {
   const handleMoveTodo = (fromTodo, toIndex, where) => {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
-    console.log(fromIndex);
 
     let newTodos = [];
     switch (where) {
@@ -35,7 +44,6 @@ export default function TodoList(props) {
         newTodos = movedTodo.concat(todoItems);
         break;
       case "bottom":
-        console.log(movedTodo);
         newTodos = todoItems.concat(movedTodo);
         break;
       default:
@@ -72,14 +80,30 @@ export default function TodoList(props) {
   }
 
   const handleAddNewTodo = () => {
+    console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
     } else {
-      NewTodoInputRef.current.focus();
+      newTodoInputRef.current.focus();
       hideNewTodo = true;
     }
   };
 
+  const handleUpdateTodo = (index, newTodoName) => {
+    if (todoItems[index] !== newTodoName && newTodoName) {
+      let newTodoItems = [...todoItems];
+      newTodoItems[index].name = newTodoName;
+      setTodoItems(newTodoItems);
+      setQuickEditStates({
+        ...quickEditStates,
+        value: "",
+      });
+    }
+
+    $("#quickTodoEdit").modal("hide");
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
+  };
   //fire before onBlur to prevent setShowNewTodo(false)
   const handlePreventNewTodoOnBlur = () => {
     hideNewTodo = false;
@@ -100,6 +124,8 @@ export default function TodoList(props) {
       handleMoveTodo,
       hideOnDrag,
       setHideOnDrag,
+      setQuickEditStates,
+      quickTodoEditRef,
     };
     return pug`
       DraggableTodo(key=index ...propsToTodo ) 
@@ -122,18 +148,25 @@ export default function TodoList(props) {
     handleNewTodoOnBlur,
     setNewTodo,
   };
+  const propsToQuickTodoEdit = {
+    quickEditStates,
+    handleUpdateTodo,
+  };
 
   return pug`
-    .d-flex.justify-content-center
-      .card.todo-list(ref =drop)
-        TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
-        .card-body.p-0
-          div #{Todos}
-          
-          if showNewTodo
-            NewTodoInput(ref=NewTodoInputRef ...propsToNewTodoInput)
+    div
+      .d-flex.justify-content-center
+        .card.todo-list(ref =drop)
+          TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
+          .card-body.p-0
+            div #{Todos}
+            
+            if showNewTodo
+              NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
 
-        TodoListFooter(...propsToTodoListFooter)
+          TodoListFooter(...propsToTodoListFooter)
+
+      QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
     `;
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./css/App.css";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import CustomDragLayer from "./dnd/customDragLayer";
@@ -22,7 +22,8 @@ const todoItems = [
     finished: false,
   },
   {
-    name: "todo4",
+    name:
+      "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
     finished: false,
   },
 ];

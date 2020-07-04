@@ -11,20 +11,19 @@ export default function DraggableTodo({
   handleMoveTodo,
   hideOnDrag,
   setHideOnDrag,
+  setQuickEditStates,
+  quickTodoEditRef,
 }) {
   const targetRef = useRef();
-  const [dimensions, setDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
+  const [isHover, setIsHover] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: ItemTypes.TODO,
       todo,
       index,
-      width: dimensions.width,
-      height: dimensions.height,
+      width: targetRef.current ? targetRef.current.offsetWidth : 0,
+      height: targetRef.current ? targetRef.current.offsetHeight : 0,
     },
     end: () => {
       setHideOnDrag(false);
@@ -52,22 +51,21 @@ export default function DraggableTodo({
     preview(getEmptyImage(), {
       captureDraggingState: true,
     });
-    // eslint-disable-next-line
-  }, []);
+  }, [preview]);
 
-  //get mounted dom dimensions
   useLayoutEffect(() => {
-    if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
-      });
-    }
-
     if (isOver) {
       setHideOnDrag(isOver);
     }
   }, [setHideOnDrag, isOver]);
+
+  const handleOnHover = () => {
+    setIsHover(true);
+  };
+
+  const handleOnLeave = () => {
+    setIsHover(false);
+  };
 
   // DOM while dragging
   if (isDragging && hideOnDrag) {
@@ -76,12 +74,22 @@ export default function DraggableTodo({
     `;
   }
 
+  const propsToTodo = {
+    todo,
+    index,
+    isDragging,
+    hideOnDrag,
+    isHover,
+    setQuickEditStates,
+    quickTodoEditRef,
+  };
+
   return pug`
     div(ref=drop)
       div.p-2
-        div(ref=drag)
+        div(ref=drag onMouseOver=handleOnHover onMouseLeave = handleOnLeave)
           div(ref=targetRef )
-            Todo(todo=todo isDragging=isDragging hideOnDrag=hideOnDrag)
+            Todo( ...propsToTodo )
 
       if isOver && canDrop
         div.p-2.pb-0
@@ -97,4 +105,6 @@ DraggableTodo.propTypes = {
   handleMoveTodo: PropTypes.func,
   hideOnDrag: PropTypes.bool,
   setHideOnDrag: PropTypes.func,
+  setQuickEditStates: PropTypes.func,
+  quickTodoEditRef: PropTypes.object,
 };
