@@ -18,8 +18,10 @@ const QuickTodoEditTextarea = React.forwardRef(
     return pug`
       div.modal-dialog(style=styles)
         div.modal-content
-          div.input-group
+          div.textarea-size
             textarea.form-control(ref=focusRef defaultValue=todoValue onFocus=handleOnFocus)
+              
+          button.btn.btn-success.mt-2.save-button Save
     `;
   }
 );
