@@ -7,8 +7,6 @@ import NewTodoInput from "./NewTodoInput.component";
 import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
-import * as $ from "jquery";
-import "bootstrap";
 
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
@@ -16,6 +14,7 @@ export default function TodoList(props) {
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
   const [quickEditStates, setQuickEditStates] = useState({
+    show: false,
     dimensions: { top: 0, left: 0, width: 0 },
     value: "",
     index: -1,
@@ -34,7 +33,7 @@ export default function TodoList(props) {
     },
   });
 
-  const handleMoveTodo = (fromTodo, toIndex, where) => {
+  function handleMoveTodo(fromTodo, toIndex, where) {
     const fromIndex = fromTodo.index;
     const movedTodo = todoItems.splice(fromIndex, 1);
 
@@ -58,11 +57,11 @@ export default function TodoList(props) {
     }
 
     setTodoItems(newTodos);
-  };
+  }
 
-  const handleShowNewTodo = () => {
+  function handleShowNewTodo() {
     setShowNewTodo(true);
-  };
+  }
 
   function AddNewTodo(newTodo) {
     const newTodoItem = [
@@ -79,7 +78,7 @@ export default function TodoList(props) {
     setShowNewTodo(false);
   }
 
-  const handleAddNewTodo = () => {
+  function handleAddNewTodo() {
     console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
@@ -87,9 +86,9 @@ export default function TodoList(props) {
       newTodoInputRef.current.focus();
       hideNewTodo = true;
     }
-  };
+  }
 
-  const handleUpdateTodo = (index, newTodoName) => {
+  function handleUpdateTodo(index, newTodoName) {
     if (todoItems[index] !== newTodoName && newTodoName) {
       let newTodoItems = [...todoItems];
       newTodoItems[index].name = newTodoName;
@@ -100,22 +99,37 @@ export default function TodoList(props) {
       });
     }
 
-    $("#quickTodoEdit").modal("hide");
-    $("body").removeClass("modal-open");
-    $(".modal-backdrop").remove();
-  };
-  //fire before onBlur to prevent setShowNewTodo(false)
-  const handlePreventNewTodoOnBlur = () => {
-    hideNewTodo = false;
-  };
+    setQuickEditStates({
+      show: false,
+    });
+  }
 
-  const handleNewTodoOnBlur = () => {
+  function handleDeleteTodo(index) {
+    console.log(index);
+
+    let newTodoItems = [...todoItems];
+
+    newTodoItems.splice(index, 1);
+
+    setTodoItems(newTodoItems);
+
+    setQuickEditStates({
+      show: false,
+    });
+  }
+
+  //fire before onBlur to prevent setShowNewTodo(false)
+  function handlePreventNewTodoOnBlur() {
+    hideNewTodo = false;
+  }
+
+  function handleNewTodoOnBlur() {
     if (newTodo) {
       AddNewTodo(newTodo);
     } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
-  };
+  }
 
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
@@ -150,7 +164,9 @@ export default function TodoList(props) {
   };
   const propsToQuickTodoEdit = {
     quickEditStates,
+    setQuickEditStates,
     handleUpdateTodo,
+    handleDeleteTodo,
   };
 
   return pug`
@@ -166,7 +182,8 @@ export default function TodoList(props) {
 
           TodoListFooter(...propsToTodoListFooter)
 
-      QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
+      if quickEditStates.show
+        QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
     `;
 }
 
