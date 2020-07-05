@@ -128,10 +128,9 @@ export default function TodoList(props) {
     }
   }
 
-  // function handleDragLeave(e) {
-  //   setHideOnDrag(false);
-  //   console.log("handleDragLeave", e.target);
-  // }
+  function handleDragLeave(e) {
+    setHideOnDrag(false);
+  }
 
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
@@ -175,15 +174,16 @@ export default function TodoList(props) {
   return pug`
     div
       .d-flex.justify-content-center
-        .card.todo-list(ref =drop)
-          TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
-          .card-body.p-0
-            div #{Todos}
-            
-            if showNewTodo
-              NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
+        .card.todo-list.p-1(ref =drop onDragLeave=handleDragLeave)
+          .div(onDragLeave=(e)=>e.stopPropagation())
+            TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
+            .card-body.p-0
+              div #{Todos}
+              
+              if showNewTodo
+                NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
 
-          TodoListFooter(...propsToTodoListFooter)
+            TodoListFooter(...propsToTodoListFooter)
 
       if quickEditStates.show
         QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
