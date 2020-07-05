@@ -1,9 +1,10 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
 export default function TodoListFooter({
+  listLength,
   handleMoveTodo,
   setHideOnDrag,
   showNewTodo,
@@ -11,25 +12,24 @@ export default function TodoListFooter({
   handlePreventNewTodoOnBlur,
   handleAddNewTodo,
 }) {
-  const [{ isOverOnBottom, item }, drop] = useDrop({
+  const [{ isOverOnBottom, item, canDrop }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => handleMoveTodo(todo, -1, "bottom"),
     collect: (monitor) => ({
       isOverOnBottom: !!monitor.isOver(),
       item: monitor.getItem(),
+      canDrop: monitor.canDrop(),
     }),
-    // canDrop: (todo) => todo.index !== 0,
+    hover: () => {
+      console.log("isOverOnBottom");
+      setHideOnDrag(canDrop);
+    },
+    canDrop: (todo) => todo.index !== listLength - 1,
   });
-
-  useLayoutEffect(() => {
-    if (isOverOnBottom) {
-      setHideOnDrag(isOverOnBottom);
-    }
-  }, [setHideOnDrag, isOverOnBottom]);
 
   return pug`
     div(ref=drop)
-      if isOverOnBottom
+      if isOverOnBottom  && canDrop
         .card-body.p-2
           span.btn.d-flex.todo-blank( style={
             height:item.height
@@ -48,6 +48,7 @@ export default function TodoListFooter({
 }
 
 TodoListFooter.propTypes = {
+  listLength: PropTypes.number,
   handleMoveTodo: PropTypes.func,
   setHideOnDrag: PropTypes.func,
   showNewTodo: PropTypes.bool,

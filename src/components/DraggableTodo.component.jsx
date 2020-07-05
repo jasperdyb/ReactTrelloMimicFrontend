@@ -16,6 +16,7 @@ export default function DraggableTodo({
 }) {
   const targetRef = useRef();
   const [isHover, setIsHover] = useState(false);
+  const [isDraggingElement, setIsDraggingElement] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
@@ -25,17 +26,24 @@ export default function DraggableTodo({
       width: targetRef.current ? targetRef.current.offsetWidth : 0,
       height: targetRef.current ? targetRef.current.offsetHeight : 0,
     },
+    begin: () => {
+      setTimeout(() => {
+        setIsDraggingElement(true);
+      }, 10);
+    },
     end: () => {
+      setIsDraggingElement(false);
       setHideOnDrag(false);
     },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
   });
 
   const [{ isOver, item, canDrop }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => {
+      setIsDraggingElement(false);
       handleMoveTodo(todo, index, "middle");
     },
     collect: (monitor) => ({
@@ -43,6 +51,10 @@ export default function DraggableTodo({
       item: monitor.getItem(),
       canDrop: monitor.canDrop(),
     }),
+    hover: () => {
+      console.log("isOver", index);
+      setHideOnDrag(canDrop);
+    },
     canDrop: (todo) => todo.index !== index,
   });
 
@@ -54,10 +66,11 @@ export default function DraggableTodo({
   }, [preview]);
 
   useLayoutEffect(() => {
-    if (isOver) {
-      setHideOnDrag(isOver);
-    }
-  }, [setHideOnDrag, isOver]);
+    // console.log(hideOnDrag);
+    // if (isOver && canDrop) {
+    //   setHideOnDrag(isOver);
+    // }
+  }, [setHideOnDrag, isOver, canDrop]);
 
   const handleOnHover = () => {
     setIsHover(true);
@@ -67,11 +80,19 @@ export default function DraggableTodo({
     setIsHover(false);
   };
 
-  // DOM while dragging
-  if (isDragging && hideOnDrag) {
+  if (isDraggingElement) {
+    if (hideOnDrag) {
+      return pug`
+        div
+      `;
+    }
+
     return pug`
-      div
-    `;
+      div.p-2.pb-0
+        span.btn.d-flex.todo-blank(style={
+                    height:item.height
+                  }) 
+        `;
   }
 
   const propsToTodo = {
@@ -79,7 +100,7 @@ export default function DraggableTodo({
     index,
     isDragging,
     hideOnDrag,
-    isHover,
+    isDragOver: isHover,
     setQuickEditStates,
     quickTodoEditRef,
   };

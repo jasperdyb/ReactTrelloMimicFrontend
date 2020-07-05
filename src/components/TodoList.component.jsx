@@ -79,7 +79,6 @@ export default function TodoList(props) {
   }
 
   function handleAddNewTodo() {
-    console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
     } else {
@@ -105,8 +104,6 @@ export default function TodoList(props) {
   }
 
   function handleDeleteTodo(index) {
-    console.log(index);
-
     let newTodoItems = [...todoItems];
 
     newTodoItems.splice(index, 1);
@@ -131,6 +128,11 @@ export default function TodoList(props) {
     }
   }
 
+  // function handleDragLeave(e) {
+  //   setHideOnDrag(false);
+  //   console.log("handleDragLeave", e.target);
+  // }
+
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
       todo,
@@ -151,6 +153,7 @@ export default function TodoList(props) {
     setHideOnDrag,
   };
   const propsToTodoListFooter = {
+    listLength: todoItems.length,
     handleMoveTodo,
     setHideOnDrag,
     showNewTodo,
