@@ -79,7 +79,6 @@ export default function TodoList(props) {
   }
 
   function handleAddNewTodo() {
-    console.log("newTodo", newTodo);
     if (newTodo) {
       AddNewTodo(newTodo);
     } else {
@@ -105,8 +104,6 @@ export default function TodoList(props) {
   }
 
   function handleDeleteTodo(index) {
-    console.log(index);
-
     let newTodoItems = [...todoItems];
 
     newTodoItems.splice(index, 1);
@@ -131,6 +128,10 @@ export default function TodoList(props) {
     }
   }
 
+  function handleDragLeave(e) {
+    setHideOnDrag(false);
+  }
+
   const Todos = todoItems.map((todo, index) => {
     const propsToTodo = {
       todo,
@@ -151,6 +152,7 @@ export default function TodoList(props) {
     setHideOnDrag,
   };
   const propsToTodoListFooter = {
+    listLength: todoItems.length,
     handleMoveTodo,
     setHideOnDrag,
     showNewTodo,
@@ -172,15 +174,16 @@ export default function TodoList(props) {
   return pug`
     div
       .d-flex.justify-content-center
-        .card.todo-list(ref =drop)
-          TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
-          .card-body.p-0
-            div #{Todos}
-            
-            if showNewTodo
-              NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
+        .card.todo-list.p-1(ref =drop onDragLeave=handleDragLeave)
+          .div(onDragLeave=(e)=>e.stopPropagation())
+            TodoListHeader( title ="Todo List" ...propsToTodoListHeader)
+            .card-body.p-0
+              div #{Todos}
+              
+              if showNewTodo
+                NewTodoInput(ref=newTodoInputRef ...propsToNewTodoInput)
 
-          TodoListFooter(...propsToTodoListFooter)
+            TodoListFooter(...propsToTodoListFooter)
 
       if quickEditStates.show
         QuickTodoEdit(ref=quickTodoEditRef ...propsToQuickTodoEdit )
