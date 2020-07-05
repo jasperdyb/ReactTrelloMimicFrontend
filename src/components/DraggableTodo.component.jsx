@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Todo from "./Todo.component";
 import PropTypes from "prop-types";
 import { ItemTypes } from "../dnd/constants.js";
@@ -40,14 +40,14 @@ export default function DraggableTodo({
     }),
   });
 
-  const [{ isOver, item, canDrop }, drop] = useDrop({
+  const [{ isDragOver, item, canDrop }, drop] = useDrop({
     accept: ItemTypes.TODO,
     drop: (todo) => {
       setIsDraggingElement(false);
       handleMoveTodo(todo, index, "middle");
     },
     collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+      isDragOver: !!monitor.isOver(),
       item: monitor.getItem(),
       canDrop: monitor.canDrop(),
     }),
@@ -64,13 +64,6 @@ export default function DraggableTodo({
       captureDraggingState: true,
     });
   }, [preview]);
-
-  useLayoutEffect(() => {
-    // console.log(hideOnDrag);
-    // if (isOver && canDrop) {
-    //   setHideOnDrag(isOver);
-    // }
-  }, [setHideOnDrag, isOver, canDrop]);
 
   const handleOnHover = () => {
     setIsHover(true);
@@ -112,7 +105,7 @@ export default function DraggableTodo({
           div(ref=targetRef )
             Todo( ...propsToTodo )
 
-      if isOver && canDrop
+      if isDragOver && canDrop
         div.p-2.pb-0
           span.btn.d-flex.todo-blank(style={
             height:item.height
