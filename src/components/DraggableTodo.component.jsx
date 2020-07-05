@@ -52,7 +52,6 @@ export default function DraggableTodo({
       canDrop: monitor.canDrop(),
     }),
     hover: () => {
-      console.log("isOver", index);
       setHideOnDrag(canDrop);
     },
     canDrop: (todo) => todo.index !== index,
@@ -87,6 +86,7 @@ export default function DraggableTodo({
                   }) 
         `;
   }
+  //TODO fix: element -1 index will become isHover and show edit icon
 
   const propsToTodo = {
     todo,

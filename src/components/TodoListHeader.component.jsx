@@ -18,7 +18,6 @@ export default function TodoListHeader({
       canDrop: monitor.canDrop(),
     }),
     hover: () => {
-      console.log("isOverOnTop");
       setHideOnDrag(canDrop);
     },
     canDrop: (todo) => todo.index !== 0,

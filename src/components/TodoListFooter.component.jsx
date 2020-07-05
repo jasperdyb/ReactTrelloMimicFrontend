@@ -21,7 +21,6 @@ export default function TodoListFooter({
       canDrop: monitor.canDrop(),
     }),
     hover: () => {
-      console.log("isOverOnBottom");
       setHideOnDrag(canDrop);
     },
     canDrop: (todo) => todo.index !== listLength - 1,
