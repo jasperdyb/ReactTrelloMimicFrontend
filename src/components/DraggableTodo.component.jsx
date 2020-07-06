@@ -27,9 +27,15 @@ export default function DraggableTodo({
       height: targetRef.current ? targetRef.current.offsetHeight : 0,
     },
     begin: () => {
+      // Call isDragging to dismount drag source will cause browser fire endDrag right away,
+      // so use an extra state to control.
       setTimeout(() => {
         setIsDraggingElement(true);
       }, 10);
+
+      if (targetRef.current) {
+        console.log("target");
+      }
     },
     end: () => {
       setIsDraggingElement(false);
@@ -82,8 +88,8 @@ export default function DraggableTodo({
     return pug`
       div.p-2.pb-0
         span.btn.d-flex.todo-blank(style={
-                    height:item.height
-                  }) 
+            height:item.height
+          }) 
         `;
   }
   //TODO fix: element -1 index will become isHover and show edit icon
@@ -102,8 +108,7 @@ export default function DraggableTodo({
     div(ref=drop)
       div.p-2
         div(ref=drag onMouseOver=handleOnHover onMouseLeave = handleOnLeave)
-          div(ref=targetRef )
-            Todo( ...propsToTodo )
+          Todo(ref=targetRef  ...propsToTodo )
 
       if isDragOver && canDrop
         div.p-2.pb-0
