@@ -15,7 +15,10 @@ export default function DraggableTodo({
   quickTodoEditRef,
 }) {
   const targetRef = useRef();
-  const [refDimensions, setRefDimensions] = useState({ width: 0, height: 0 });
+  const [refDimensions, setRefDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const [isDraggingElement, setIsDraggingElement] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -47,6 +50,10 @@ export default function DraggableTodo({
     drop: (todo) => {
       setIsDraggingElement(false);
       handleMoveTodo(todo, index, "middle");
+      setRefDimensions({
+        width: todo.width,
+        height: todo.height,
+      });
     },
     collect: (monitor) => ({
       isDragOver: !!monitor.isOver(),
@@ -64,12 +71,18 @@ export default function DraggableTodo({
     preview(getEmptyImage(), {
       captureDraggingState: true,
     });
+    // eslint-disable-next-line
+  }, []);
 
-    setRefDimensions({
-      width: targetRef.current.offsetWidth,
-      height: targetRef.current.offsetHeight,
-    });
-  }, [preview, setRefDimensions]);
+  //update drag source dimension
+  useEffect(() => {
+    if (targetRef.current) {
+      setRefDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight,
+      });
+    }
+  }, [todo]);
 
   const handleOnHover = () => {};
 
