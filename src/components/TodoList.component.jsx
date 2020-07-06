@@ -9,11 +9,12 @@ import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
 //GraphQL
-import { useMutation } from "@apollo/react-hooks";
+import queries from "../graphQL/queries.js";
 import mutations from "../graphQL/mutations.js";
+import { useMutation } from "@apollo/react-hooks";
 
-export default function TodoList(props) {
-  const [todoItems, setTodoItems] = useState(props.todoItems);
+export default function TodoList({ todoItems }) {
+  // const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
@@ -25,7 +26,15 @@ export default function TodoList(props) {
   });
 
   // graphQL
-  const [addTodo] = useMutation(mutations.ADD_TODO);
+  const [addTodo] = useMutation(mutations.ADD_TODO, {
+    update(cache, { data: { addTodo } }) {
+      const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: list.concat([addTodo]) },
+      });
+    },
+  });
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -63,7 +72,7 @@ export default function TodoList(props) {
         newTodos = todoItems.concat(movedTodo).concat(tails);
     }
 
-    setTodoItems(newTodos);
+    // setTodoItems(newTodos);
   }
 
   function handleShowNewTodo() {
@@ -72,14 +81,6 @@ export default function TodoList(props) {
 
   async function AddNewTodo(newTodo) {
     addTodo({ variables: { name: newTodo } });
-    // const newTodoItem = [
-    //   {
-    //     name: newTodo,
-    //     finished: false,
-    //   },
-    // ];
-    // const newTodos = todoItems.concat(newTodoItem);
-    // setTodoItems(newTodos);
 
     setNewTodo("");
     hideNewTodo = true;
@@ -99,7 +100,7 @@ export default function TodoList(props) {
     if (todoItems[index] !== newTodoName && newTodoName) {
       let newTodoItems = [...todoItems];
       newTodoItems[index].name = newTodoName;
-      setTodoItems(newTodoItems);
+      // setTodoItems(newTodoItems);
       setQuickEditStates({
         ...quickEditStates,
         value: "",
@@ -116,7 +117,7 @@ export default function TodoList(props) {
 
     newTodoItems.splice(index, 1);
 
-    setTodoItems(newTodoItems);
+    // setTodoItems(newTodoItems);
 
     setQuickEditStates({
       show: false,
@@ -151,7 +152,7 @@ export default function TodoList(props) {
       quickTodoEditRef,
     };
     return pug`
-      DraggableTodo(key=index ...propsToTodo ) 
+      DraggableTodo(key=todo.id ...propsToTodo ) 
     `;
   });
 
