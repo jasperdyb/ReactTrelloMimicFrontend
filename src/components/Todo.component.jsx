@@ -46,7 +46,7 @@ const Todo = React.forwardRef(
     }
 
     return pug`
-      div.btn.d-flex.todo-item(ref=targetRef onMouseOver =handleOnOver onMouseLeave=handleOnLeave) 
+      div.btn.d-flex.todo-item(ref=targetRef onMouseEnter =handleOnOver onMouseLeave=handleOnLeave) 
         div.text-left.mb-1.todo-text #{todo.name}
         if isOver 
           button.edit.mr-1( onClick=handleClick onContextMenu=handleClick)

@@ -15,7 +15,7 @@ export default function DraggableTodo({
   quickTodoEditRef,
 }) {
   const targetRef = useRef();
-  const [isHover, setIsHover] = useState(false);
+  const [refDimensions, setRefDimensions] = useState({ width: 0, height: 0 });
   const [isDraggingElement, setIsDraggingElement] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -23,8 +23,8 @@ export default function DraggableTodo({
       type: ItemTypes.TODO,
       todo,
       index,
-      width: targetRef.current ? targetRef.current.offsetWidth : 0,
-      height: targetRef.current ? targetRef.current.offsetHeight : 0,
+      width: refDimensions.width,
+      height: refDimensions.height,
     },
     begin: () => {
       // Call isDragging to dismount drag source will cause browser fire endDrag right away,
@@ -32,10 +32,6 @@ export default function DraggableTodo({
       setTimeout(() => {
         setIsDraggingElement(true);
       }, 10);
-
-      if (targetRef.current) {
-        console.log("target");
-      }
     },
     end: () => {
       setIsDraggingElement(false);
@@ -68,15 +64,16 @@ export default function DraggableTodo({
     preview(getEmptyImage(), {
       captureDraggingState: true,
     });
-  }, [preview]);
 
-  const handleOnHover = () => {
-    setIsHover(true);
-  };
+    setRefDimensions({
+      width: targetRef.current.offsetWidth,
+      height: targetRef.current.offsetHeight,
+    });
+  }, [preview, setRefDimensions]);
 
-  const handleOnLeave = () => {
-    setIsHover(false);
-  };
+  const handleOnHover = () => {};
+
+  const handleOnLeave = () => {};
 
   if (isDraggingElement) {
     if (hideOnDrag) {
@@ -99,7 +96,7 @@ export default function DraggableTodo({
     index,
     isDragging,
     hideOnDrag,
-    isDragOver: isHover,
+    isDragOver,
     setQuickEditStates,
     quickTodoEditRef,
   };
