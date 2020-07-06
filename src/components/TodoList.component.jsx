@@ -36,6 +36,15 @@ export default function TodoList({ todoItems }) {
     },
   });
   const [updateTodo] = useMutation(mutations.UPDATE_TODO);
+  const [deleteTodo] = useMutation(mutations.DELETE_TODO, {
+    update(cache, { data: { deleteTodo } }) {
+      const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: list.filter((todo) => todo.id !== deleteTodo.id) },
+      });
+    },
+  });
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -115,9 +124,13 @@ export default function TodoList({ todoItems }) {
   }
 
   function handleDeleteTodo(index) {
-    let newTodoItems = [...todoItems];
+    // let newTodoItems = [...todoItems];
 
-    newTodoItems.splice(index, 1);
+    // newTodoItems.splice(index, 1);
+
+    const id = todoItems[index].id;
+
+    deleteTodo({ variables: { id } });
 
     // setTodoItems(newTodoItems);
 

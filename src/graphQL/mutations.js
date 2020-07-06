@@ -18,6 +18,13 @@ const mutations = {
       }
     }
   `,
+  DELETE_TODO: gql`
+    mutation DeleteTodo($id: ID!) {
+      deleteTodo(id: $id) {
+        id
+      }
+    }
+  `,
 };
 
 export default mutations;
