@@ -8,6 +8,10 @@ import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
+//GraphQL
+import { useMutation } from "@apollo/react-hooks";
+import mutations from "../graphQL/mutations.js";
+
 export default function TodoList(props) {
   const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
@@ -19,6 +23,9 @@ export default function TodoList(props) {
     value: "",
     index: -1,
   });
+
+  // graphQL
+  const [addTodo] = useMutation(mutations.ADD_TODO);
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -63,15 +70,16 @@ export default function TodoList(props) {
     setShowNewTodo(true);
   }
 
-  function AddNewTodo(newTodo) {
-    const newTodoItem = [
-      {
-        name: newTodo,
-        finished: false,
-      },
-    ];
-    const newTodos = todoItems.concat(newTodoItem);
-    setTodoItems(newTodos);
+  async function AddNewTodo(newTodo) {
+    addTodo({ variables: { name: newTodo } });
+    // const newTodoItem = [
+    //   {
+    //     name: newTodo,
+    //     finished: false,
+    //   },
+    // ];
+    // const newTodos = todoItems.concat(newTodoItem);
+    // setTodoItems(newTodos);
 
     setNewTodo("");
     hideNewTodo = true;
