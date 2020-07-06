@@ -15,7 +15,7 @@ export default function DraggableTodo({
   quickTodoEditRef,
 }) {
   const targetRef = useRef();
-  const [isHover, setIsHover] = useState(false);
+  const [refDimensions, setRefDimensions] = useState({ width: 0, height: 0 });
   const [isDraggingElement, setIsDraggingElement] = useState(false);
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -23,10 +23,12 @@ export default function DraggableTodo({
       type: ItemTypes.TODO,
       todo,
       index,
-      width: targetRef.current ? targetRef.current.offsetWidth : 0,
-      height: targetRef.current ? targetRef.current.offsetHeight : 0,
+      width: refDimensions.width,
+      height: refDimensions.height,
     },
     begin: () => {
+      // Call isDragging to dismount drag source will cause browser fire endDrag right away,
+      // so use an extra state to control.
       setTimeout(() => {
         setIsDraggingElement(true);
       }, 10);
@@ -62,15 +64,16 @@ export default function DraggableTodo({
     preview(getEmptyImage(), {
       captureDraggingState: true,
     });
-  }, [preview]);
 
-  const handleOnHover = () => {
-    setIsHover(true);
-  };
+    setRefDimensions({
+      width: targetRef.current.offsetWidth,
+      height: targetRef.current.offsetHeight,
+    });
+  }, [preview, setRefDimensions]);
 
-  const handleOnLeave = () => {
-    setIsHover(false);
-  };
+  const handleOnHover = () => {};
+
+  const handleOnLeave = () => {};
 
   if (isDraggingElement) {
     if (hideOnDrag) {
@@ -82,8 +85,8 @@ export default function DraggableTodo({
     return pug`
       div.p-2.pb-0
         span.btn.d-flex.todo-blank(style={
-                    height:item.height
-                  }) 
+            height:item.height
+          }) 
         `;
   }
   //TODO fix: element -1 index will become isHover and show edit icon
@@ -93,7 +96,7 @@ export default function DraggableTodo({
     index,
     isDragging,
     hideOnDrag,
-    isDragOver: isHover,
+    isDragOver,
     setQuickEditStates,
     quickTodoEditRef,
   };
@@ -102,8 +105,7 @@ export default function DraggableTodo({
     div(ref=drop)
       div.p-2
         div(ref=drag onMouseOver=handleOnHover onMouseLeave = handleOnLeave)
-          div(ref=targetRef )
-            Todo( ...propsToTodo )
+          Todo(ref=targetRef  ...propsToTodo )
 
       if isDragOver && canDrop
         div.p-2.pb-0
