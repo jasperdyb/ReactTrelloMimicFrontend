@@ -25,7 +25,7 @@ export default function TodoList({ todoItems }) {
     index: -1,
   });
 
-  // graphQL
+  // graphQL hooks
   const [addTodo] = useMutation(mutations.ADD_TODO, {
     update(cache, { data: { addTodo } }) {
       const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
@@ -79,8 +79,8 @@ export default function TodoList({ todoItems }) {
     setShowNewTodo(true);
   }
 
-  async function AddNewTodo(newTodo) {
-    addTodo({ variables: { name: newTodo } });
+  async function AddNewTodo() {
+    await addTodo({ variables: { name: newTodo } });
 
     setNewTodo("");
     hideNewTodo = true;
@@ -89,7 +89,7 @@ export default function TodoList({ todoItems }) {
 
   function handleAddNewTodo() {
     if (newTodo) {
-      AddNewTodo(newTodo);
+      AddNewTodo();
     } else {
       newTodoInputRef.current.focus();
       hideNewTodo = true;
@@ -131,7 +131,7 @@ export default function TodoList({ todoItems }) {
 
   function handleNewTodoOnBlur() {
     if (newTodo) {
-      AddNewTodo(newTodo);
+      AddNewTodo();
     } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
