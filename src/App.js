@@ -7,31 +7,32 @@ import CustomDragLayer from "./dnd/customDragLayer";
 // Components
 import TodoList from "./components/TodoList.component.jsx";
 
-//dummy
-const todoItems = [
-  {
-    name: "todo1",
-    finished: false,
-  },
-  {
-    name: "todo2",
-    finished: false,
-  },
-  {
-    name: "todo3",
-    finished: false,
-  },
-  {
-    name:
-      "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-    finished: false,
-  },
-];
+//graphQL
+import { gql } from "apollo-boost";
+import { Query } from "react-apollo";
 
-const App = () => pug`
-  DndProvider(backend=HTML5Backend)
-    CustomDragLayer 
-    TodoList(todoItems=todoItems)
-  `;
+const GET_TODO_LIST = gql`
+  query {
+    list {
+      id
+      name
+    }
+  }
+`;
+
+const App = () => (
+  <Query query={GET_TODO_LIST}>
+    {({ loading, error, data }) => {
+      if (loading) return <div>Loading...</div>;
+      if (error) return <div>Error :(</div>;
+
+      return pug`
+        DndProvider(backend=HTML5Backend)
+          CustomDragLayer 
+          TodoList(todoItems=data.list)
+    `;
+    }}
+  </Query>
+);
 
 export default App;
