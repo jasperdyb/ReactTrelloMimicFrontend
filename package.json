@@ -13,6 +13,7 @@
     "bootstrap": "^4.5.0",
     "eslint-plugin-react-pug": "^0.8.4",
     "graphql": "^15.3.0",
+    "graphql-tag": "^2.10.3",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
