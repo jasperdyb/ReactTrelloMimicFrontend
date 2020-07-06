@@ -106,11 +106,11 @@ export default function TodoList({ todoItems }) {
     }
   }
 
-  function handleUpdateTodo(index, newTodoName) {
+  async function handleUpdateTodo(index, newTodoName) {
     if (todoItems[index] !== newTodoName && newTodoName) {
       const id = todoItems[index].id;
 
-      updateTodo({ variables: { id, name: newTodoName } });
+      await updateTodo({ variables: { id, name: newTodoName } });
 
       setQuickEditStates({
         ...quickEditStates,
@@ -123,16 +123,10 @@ export default function TodoList({ todoItems }) {
     });
   }
 
-  function handleDeleteTodo(index) {
-    // let newTodoItems = [...todoItems];
-
-    // newTodoItems.splice(index, 1);
-
+  async function handleDeleteTodo(index) {
     const id = todoItems[index].id;
 
-    deleteTodo({ variables: { id } });
-
-    // setTodoItems(newTodoItems);
+    await deleteTodo({ variables: { id } });
 
     setQuickEditStates({
       show: false,
