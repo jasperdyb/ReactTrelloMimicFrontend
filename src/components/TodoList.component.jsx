@@ -35,6 +35,7 @@ export default function TodoList({ todoItems }) {
       });
     },
   });
+  const [updateTodo] = useMutation(mutations.UPDATE_TODO);
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -98,9 +99,10 @@ export default function TodoList({ todoItems }) {
 
   function handleUpdateTodo(index, newTodoName) {
     if (todoItems[index] !== newTodoName && newTodoName) {
-      let newTodoItems = [...todoItems];
-      newTodoItems[index].name = newTodoName;
-      // setTodoItems(newTodoItems);
+      const id = todoItems[index].id;
+
+      updateTodo({ variables: { id, name: newTodoName } });
+
       setQuickEditStates({
         ...quickEditStates,
         value: "",

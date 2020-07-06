@@ -10,6 +10,14 @@ const mutations = {
       }
     }
   `,
+  UPDATE_TODO: gql`
+    mutation UpdateTodo($id: ID!, $name: String!) {
+      updateTodo(id: $id, name: $name) {
+        id
+        name
+      }
+    }
+  `,
 };
 
 export default mutations;
