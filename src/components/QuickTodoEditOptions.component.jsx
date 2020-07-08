@@ -6,9 +6,6 @@ export default function QuickTodoEditOptions({ index, handleDeleteTodo }) {
   return pug`
     div.options
       ul.p-1
-        li 
-          button.option-button Edit tag
-
         li
           button.option-button(onClick=(e)=>handleDeleteTodo(index)) Delete
   `;

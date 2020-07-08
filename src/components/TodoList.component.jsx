@@ -8,8 +8,13 @@ import QuickTodoEdit from "./QuickTodoEdit.component";
 import { ItemTypes } from "../dnd/constants.js";
 import { useDrop } from "react-dnd";
 
-export default function TodoList(props) {
-  const [todoItems, setTodoItems] = useState(props.todoItems);
+//GraphQL
+import queries from "../graphQL/queries.js";
+import mutations from "../graphQL/mutations.js";
+import { useMutation } from "@apollo/react-hooks";
+
+export default function TodoList({ todoItems }) {
+  // const [todoItems, setTodoItems] = useState(props.todoItems);
   const [hideOnDrag, setHideOnDrag] = useState(false);
   const [showNewTodo, setShowNewTodo] = useState(false);
   const [newTodo, setNewTodo] = useState("");
@@ -18,6 +23,35 @@ export default function TodoList(props) {
     dimensions: { top: 0, left: 0, width: 0 },
     value: "",
     index: -1,
+  });
+
+  // graphQL hooks
+  const [addTodo] = useMutation(mutations.ADD_TODO, {
+    update(cache, { data: { addTodo } }) {
+      const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: list.concat([addTodo]) },
+      });
+    },
+  });
+  const [updateTodoName] = useMutation(mutations.UPDATE_TODO_NAME);
+  const [deleteTodo] = useMutation(mutations.DELETE_TODO, {
+    update(cache, { data: { deleteTodo } }) {
+      const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: list.filter((todo) => todo.id !== deleteTodo.id) },
+      });
+    },
+  });
+  const [updateListOrder] = useMutation(mutations.UPDATE_LIST_ORDER, {
+    update(cache, { data: { updateListOrder } }) {
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: updateListOrder },
+      });
+    },
   });
 
   const newTodoInputRef = useRef(null);
@@ -33,45 +67,44 @@ export default function TodoList(props) {
     },
   });
 
-  function handleMoveTodo(fromTodo, toIndex, where) {
+  async function handleMoveTodo(fromTodo, toIndex, dropArea) {
+    let newTodoOrder = todoItems.map((todo) => todo.id);
     const fromIndex = fromTodo.index;
-    const movedTodo = todoItems.splice(fromIndex, 1);
+    const movedTodo = newTodoOrder.splice(fromIndex, 1);
 
-    let newTodos = [];
-    switch (where) {
+    switch (dropArea) {
       case "top":
-        newTodos = movedTodo.concat(todoItems);
+        newTodoOrder = movedTodo.concat(newTodoOrder);
         break;
       case "bottom":
-        newTodos = todoItems.concat(movedTodo);
+        newTodoOrder = newTodoOrder.concat(movedTodo);
         break;
       default:
         let tails = [];
         if (fromIndex < toIndex) {
-          tails = todoItems.splice(toIndex);
+          tails = newTodoOrder.splice(toIndex);
         } else {
-          tails = todoItems.splice(toIndex + 1);
+          tails = newTodoOrder.splice(toIndex + 1);
         }
 
-        newTodos = todoItems.concat(movedTodo).concat(tails);
+        newTodoOrder = newTodoOrder.concat(movedTodo).concat(tails);
     }
 
-    setTodoItems(newTodos);
+    newTodoOrder = newTodoOrder.map((id, index) => ({
+      id: id,
+      order: index,
+    }));
+
+    await updateListOrder({ variables: { newOrder: newTodoOrder } });
   }
 
   function handleShowNewTodo() {
     setShowNewTodo(true);
   }
 
-  function AddNewTodo(newTodo) {
-    const newTodoItem = [
-      {
-        name: newTodo,
-        finished: false,
-      },
-    ];
-    const newTodos = todoItems.concat(newTodoItem);
-    setTodoItems(newTodos);
+  async function AddNewTodo() {
+    console.log(todoItems.length, typeof todoItems.length);
+    await addTodo({ variables: { name: newTodo, order: todoItems.length } });
 
     setNewTodo("");
     hideNewTodo = true;
@@ -80,18 +113,19 @@ export default function TodoList(props) {
 
   function handleAddNewTodo() {
     if (newTodo) {
-      AddNewTodo(newTodo);
+      AddNewTodo();
     } else {
       newTodoInputRef.current.focus();
       hideNewTodo = true;
     }
   }
 
-  function handleUpdateTodo(index, newTodoName) {
+  async function handleUpdateTodo(index, newTodoName) {
     if (todoItems[index] !== newTodoName && newTodoName) {
-      let newTodoItems = [...todoItems];
-      newTodoItems[index].name = newTodoName;
-      setTodoItems(newTodoItems);
+      const id = todoItems[index].id;
+
+      await updateTodoName({ variables: { id, name: newTodoName } });
+
       setQuickEditStates({
         ...quickEditStates,
         value: "",
@@ -103,12 +137,10 @@ export default function TodoList(props) {
     });
   }
 
-  function handleDeleteTodo(index) {
-    let newTodoItems = [...todoItems];
+  async function handleDeleteTodo(index) {
+    const id = todoItems[index].id;
 
-    newTodoItems.splice(index, 1);
-
-    setTodoItems(newTodoItems);
+    await deleteTodo({ variables: { id } });
 
     setQuickEditStates({
       show: false,
@@ -122,7 +154,7 @@ export default function TodoList(props) {
 
   function handleNewTodoOnBlur() {
     if (newTodo) {
-      AddNewTodo(newTodo);
+      AddNewTodo();
     } else if (hideNewTodo) {
       setShowNewTodo(false);
     }
@@ -143,7 +175,7 @@ export default function TodoList(props) {
       quickTodoEditRef,
     };
     return pug`
-      DraggableTodo(key=index ...propsToTodo ) 
+      DraggableTodo(key=todo.order ...propsToTodo ) 
     `;
   });
 
