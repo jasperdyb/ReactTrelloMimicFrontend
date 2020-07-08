@@ -103,7 +103,6 @@ export default function TodoList({ todoItems }) {
   }
 
   async function AddNewTodo() {
-    console.log(todoItems.length, typeof todoItems.length);
     await addTodo({ variables: { name: newTodo, order: todoItems.length } });
 
     setNewTodo("");
