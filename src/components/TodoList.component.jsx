@@ -90,7 +90,8 @@ export default function TodoList({ todoItems }) {
   }
 
   async function AddNewTodo() {
-    await addTodo({ variables: { name: newTodo } });
+    console.log(todoItems.length, typeof todoItems.length);
+    await addTodo({ variables: { name: newTodo, order: todoItems.length } });
 
     setNewTodo("");
     hideNewTodo = true;
@@ -161,7 +162,7 @@ export default function TodoList({ todoItems }) {
       quickTodoEditRef,
     };
     return pug`
-      DraggableTodo(key=todo.id ...propsToTodo ) 
+      DraggableTodo(key=todo.order ...propsToTodo ) 
     `;
   });
 

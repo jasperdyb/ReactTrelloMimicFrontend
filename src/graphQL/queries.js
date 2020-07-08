@@ -7,6 +7,7 @@ const queries = {
       list {
         id
         name
+        order
       }
     }
   `,

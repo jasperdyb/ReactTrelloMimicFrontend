@@ -3,10 +3,11 @@ import gql from "graphql-tag";
 
 const mutations = {
   ADD_TODO: gql`
-    mutation AddTodo($name: String!) {
-      addTodo(name: $name) {
+    mutation AddTodo($name: String!, $order: Int!) {
+      addTodo(name: $name, order: $order) {
         id
         name
+        order
       }
     }
   `,
