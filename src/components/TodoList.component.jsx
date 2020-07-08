@@ -35,7 +35,7 @@ export default function TodoList({ todoItems }) {
       });
     },
   });
-  const [updateTodo] = useMutation(mutations.UPDATE_TODO);
+  const [updateTodoName] = useMutation(mutations.UPDATE_TODO_NAME);
   const [deleteTodo] = useMutation(mutations.DELETE_TODO, {
     update(cache, { data: { deleteTodo } }) {
       const { list } = cache.readQuery({ query: queries.GET_TODO_LIST });
@@ -111,7 +111,7 @@ export default function TodoList({ todoItems }) {
     if (todoItems[index] !== newTodoName && newTodoName) {
       const id = todoItems[index].id;
 
-      await updateTodo({ variables: { id, name: newTodoName } });
+      await updateTodoName({ variables: { id, name: newTodoName } });
 
       setQuickEditStates({
         ...quickEditStates,

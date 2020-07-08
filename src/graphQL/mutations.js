@@ -11,9 +11,9 @@ const mutations = {
       }
     }
   `,
-  UPDATE_TODO: gql`
-    mutation UpdateTodo($id: ID!, $name: String!) {
-      updateTodo(id: $id, name: $name) {
+  UPDATE_TODO_NAME: gql`
+    mutation UpdateTodoName($id: ID!, $name: String!) {
+      updateTodoName(id: $id, name: $name) {
         id
         name
       }
