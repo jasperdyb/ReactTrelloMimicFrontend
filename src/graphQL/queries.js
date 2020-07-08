@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 const queries = {
   GET_TODO_LIST: gql`
     {
-      list {
+      list(orderBy: { order: asc }) {
         id
         name
         order
