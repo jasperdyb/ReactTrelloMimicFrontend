@@ -45,6 +45,14 @@ export default function TodoList({ todoItems }) {
       });
     },
   });
+  const [updateListOrder] = useMutation(mutations.UPDATE_LIST_ORDER, {
+    update(cache, { data: { updateListOrder } }) {
+      cache.writeQuery({
+        query: queries.GET_TODO_LIST,
+        data: { list: updateListOrder },
+      });
+    },
+  });
 
   const newTodoInputRef = useRef(null);
   const quickTodoEditRef = useRef(null);
@@ -59,30 +67,35 @@ export default function TodoList({ todoItems }) {
     },
   });
 
-  function handleMoveTodo(fromTodo, toIndex, where) {
+  async function handleMoveTodo(fromTodo, toIndex, where) {
     const fromIndex = fromTodo.index;
-    const movedTodo = todoItems.splice(fromIndex, 1);
+    let newTodos = [...todoItems];
+    const movedTodo = newTodos.splice(fromIndex, 1);
 
-    let newTodos = [];
     switch (where) {
       case "top":
-        newTodos = movedTodo.concat(todoItems);
+        newTodos = movedTodo.concat(newTodos);
         break;
       case "bottom":
-        newTodos = todoItems.concat(movedTodo);
+        newTodos = newTodos.concat(movedTodo);
         break;
       default:
         let tails = [];
         if (fromIndex < toIndex) {
-          tails = todoItems.splice(toIndex);
+          tails = newTodos.splice(toIndex);
         } else {
-          tails = todoItems.splice(toIndex + 1);
+          tails = newTodos.splice(toIndex + 1);
         }
 
-        newTodos = todoItems.concat(movedTodo).concat(tails);
+        newTodos = newTodos.concat(movedTodo).concat(tails);
     }
 
-    // setTodoItems(newTodos);
+    const newTodoOrder = newTodos.map((todo, index) => ({
+      id: todo.id,
+      order: index,
+    }));
+
+    await updateListOrder({ variables: { newOrder: newTodoOrder } });
   }
 
   function handleShowNewTodo() {

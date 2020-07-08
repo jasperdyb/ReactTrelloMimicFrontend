@@ -19,6 +19,16 @@ const mutations = {
       }
     }
   `,
+  UPDATE_LIST_ORDER: gql`
+    mutation UpdateListOrder($newOrder: [Order!]!) {
+      updateListOrder(newOrder: $newOrder) {
+        id
+        order
+        name
+        finished
+      }
+    }
+  `,
   DELETE_TODO: gql`
     mutation DeleteTodo($id: ID!) {
       deleteTodo(id: $id) {
