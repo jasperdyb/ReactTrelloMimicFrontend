@@ -67,31 +67,31 @@ export default function TodoList({ todoItems }) {
     },
   });
 
-  async function handleMoveTodo(fromTodo, toIndex, where) {
+  async function handleMoveTodo(fromTodo, toIndex, dropArea) {
+    let newTodoOrder = todoItems.map((todo) => todo.id);
     const fromIndex = fromTodo.index;
-    let newTodos = [...todoItems];
-    const movedTodo = newTodos.splice(fromIndex, 1);
+    const movedTodo = newTodoOrder.splice(fromIndex, 1);
 
-    switch (where) {
+    switch (dropArea) {
       case "top":
-        newTodos = movedTodo.concat(newTodos);
+        newTodoOrder = movedTodo.concat(newTodoOrder);
         break;
       case "bottom":
-        newTodos = newTodos.concat(movedTodo);
+        newTodoOrder = newTodoOrder.concat(movedTodo);
         break;
       default:
         let tails = [];
         if (fromIndex < toIndex) {
-          tails = newTodos.splice(toIndex);
+          tails = newTodoOrder.splice(toIndex);
         } else {
-          tails = newTodos.splice(toIndex + 1);
+          tails = newTodoOrder.splice(toIndex + 1);
         }
 
-        newTodos = newTodos.concat(movedTodo).concat(tails);
+        newTodoOrder = newTodoOrder.concat(movedTodo).concat(tails);
     }
 
-    const newTodoOrder = newTodos.map((todo, index) => ({
-      id: todo.id,
+    newTodoOrder = newTodoOrder.map((id, index) => ({
+      id: id,
       order: index,
     }));
 
