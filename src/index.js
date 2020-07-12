@@ -6,9 +6,15 @@ import * as serviceWorker from "./serviceWorker";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
+let connection = "https://powerful-savannah-37896.herokuapp.com/";
+if (process.env.NODE_ENV !== "production") {
+  // 如果不是 production 模式
+  connection = "http://localhost:4000";
+}
+
 //Apollo server
 const client = new ApolloClient({
-  uri: "http://localhost:4000",
+  uri: connection,
 });
 
 ReactDOM.render(
