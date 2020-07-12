@@ -15,7 +15,7 @@ const App = () => {
   const { loading, error, data } = useQuery(queries.GET_TODO_LIST);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error :(</div>;
+  if (error) return <div>Error : {error.message}</div>;
 
   console.log(error);
 
