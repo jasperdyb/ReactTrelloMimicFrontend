@@ -6,15 +6,15 @@ import * as serviceWorker from "./serviceWorker";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
-let connection = "https://powerful-savannah-37896.herokuapp.com/graphql";
-if (process.env.NODE_ENV !== "production") {
-  // 如果不是 production 模式
-  connection = "http://localhost:5000/graphql";
-}
+// let connection = "https://powerful-savannah-37896.herokuapp.com/graphql";
+// if (process.env.NODE_ENV !== "production") {
+//   // 如果不是 production 模式
+//   connection = "http://localhost:5000/graphql";
+// }
 
 //Apollo server
 const client = new ApolloClient({
-  uri: connection,
+  uri: "https://powerful-savannah-37896.herokuapp.com/graphql",
 });
 
 ReactDOM.render(
