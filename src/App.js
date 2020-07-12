@@ -17,6 +17,8 @@ const App = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error :(</div>;
 
+  console.log(error);
+
   return pug`
     DndProvider(backend=HTML5Backend)
       CustomDragLayer 
